@@ -1,12 +1,9 @@
-import Game1 from "./components/P5"
-import Game2 from "./components/Konva"
+import Game1 from "./components/Home"
 
 function App() {
   return (
     <div className="App">
-      <p>Hello</p>
       <Game1/>
-      <Game2/>
     </div>
   );
 }

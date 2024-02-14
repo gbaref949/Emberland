@@ -2,4 +2,38 @@
 @import "./partials/footer", "./partials/nav", "./partials/reset", "./partials/utillities";
 
 //here's the json path
-//"savePath": "/src/css" //group project
+//"savePath": "/src/css" //group project]
+
+*{
+    background-color: #001528;
+    color: rgb(216, 216, 216);
+}
+
+body{
+    background-color: #001528;
+    background: linear-gradient(180deg, #025962 0%, rgba(0, 21, 40, 0.00) 100%);
+    min-height: 100vh;
+}
+
+.homeLogo{
+    height: 620px;
+    width: 650px;
+    margin: 0 auto;
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff00;
+}
+
+.btn{
+    background-color: #025962;
+    width: 10rem;
+    height: 3rem;
+    flex-shrink: 0;
+    margin: 0 auto;
+    position: fixed;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
