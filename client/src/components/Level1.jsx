@@ -1,84 +1,39 @@
-import React from 'react';
-import './styles.css'; // Importing the CSS file
+import React, { useEffect } from 'react';
+import p5 from 'p5';
 
-class Block {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.speed = 4; // Speed of the block
-  }
+const Game = () => {
+  useEffect(() => {
+    const sketch = (p) => {
+      let x = 50;
+      let y = 50;
 
-  update() {
-    // Check for key presses and move the block accordingly
-    if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-      this.x -= this.speed;
-    }
-    if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-      this.x += this.speed;
-    }
-    if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-      this.y -= this.speed;
-    }
-    if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
-      this.y += this.speed;
-    }
+      p.setup = () => {
+        p.createCanvas(400, 400);
+      };
 
-    // Constrain the block within the canvas boundaries
-    this.x = constrain(this.x, 0, window.innerWidth - blockSize);
-    this.y = constrain(this.y, 0, window.innerHeight - blockSize);
-  }
+      p.draw = () => {
+        p.background(0);
+        p.fill(255);
+        p.rect(x, y, 50, 50);
+      };
 
-  show() {
-    return (
-      <div
-        style={{
-          position: 'absolute',
-          left: this.x,
-          top: this.y,
-          width: blockSize,
-          height: blockSize,
-          backgroundColor: 'red',
-        }}
-      ></div>
-    );
-  }
-}
+      p.keyPressed = () => {
+        if (p.keyCode === p.LEFT_ARROW) {
+          x -= 5;
+        } else if (p.keyCode === p.RIGHT_ARROW) {
+          x += 5;
+        } else if (p.keyCode === p.UP_ARROW) {
+          y -= 5;
+        } else if (p.keyCode === p.DOWN_ARROW) {
+          y += 5;
+        }
+      };
+    };
 
-class Level1 extends React.Component {
-  constructor(props) {
-    super(props);
-    this.block = null;
-    this.blockSize = 50;
-  }
+    new p5(sketch);
+  }, []);
 
-  componentDidMount() {
-    this.block = new Block(window.innerWidth / 2, window.innerHeight / 2);
-    window.addEventListener('keydown', this.handleKeyPress);
-    this.interval = setInterval(this.updateGame, 16); // 60 frames per second
-  }
+  return <div id="game-container"></div>;
+};
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyPress);
-    clearInterval(this.interval);
-  }
-
-  handleKeyPress = (event) => {
-    // Handle key presses
-    // You can implement the logic for moving the block here
-  };
-
-  updateGame = () => {
-    this.block.update();
-    this.forceUpdate(); // Force re-render to update block position
-  };
-
-  render() {
-    return (
-      <div>
-        <div className="game-container">{this.block.show()}</div>
-      </div>
-    );
-  }
-}
-
-export default Level1;
+export default Game;
