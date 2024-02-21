@@ -7,8 +7,8 @@ function App() {
   return (
     <div className="App">
       {/* <Game1/> */}
-      <Level1/>
-      {/* <Testing/> */}
+      {/* <Level1/> */}
+      <Testing/>
       {/* <NewTest/> */}
     </div>
   );

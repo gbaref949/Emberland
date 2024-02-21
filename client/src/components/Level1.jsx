@@ -28,9 +28,9 @@ const Game = () => {
           y += 5;
         }
       };
-    };
+      };
 
-    new p5(sketch);
+      new p5(sketch);
   }, []);
 
   return <div id="game-container"></div>;
