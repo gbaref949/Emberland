@@ -1,6 +1,5 @@
 // Sketch.js
 import React, { useEffect } from 'react';
-import {Helmet} from 'react-helmet'
 
 const Sketch = () => {
     useEffect(() => {

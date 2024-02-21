@@ -1,76 +1,57 @@
-import React from 'react'
-import {Helmet} from 'react-helmet'
+import {useEffect} from 'react'
 
 const NewTest = () => {
     useEffect(() => {
         // Script source URL for p5.js
-        const scriptSrc = 'https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js';
+        const scriptSrc = 'https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.min.js';
 
         // Create a script element
         const script = document.createElement('script');
         script.src = scriptSrc;
         script.async = true;
 
-        let xpos = 300;
-        let ypos = 300;
-
         // Append the script element to the head
-        document.body.appendChild(script);
-
-        let block;
-        const blockSize = 50; // Size of the block
-
-        function setup() {
-            createCanvas(windowWidth, windowHeight); // Creating a canvas that fits the window
-            background(0, 0, 255); // Blue background
-            block = new Block(width / 2, height / 2); // Creating a new block
-        }
-
-        function draw() {
-            background(0, 0, 255); // Redrawing the background to clear previous frame
-            block.update(); // Update the block's position based on user input
-            block.show(); // Display the block
-        }
-
-        class Block {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.speed = 4; // Speed of the block
-            }
-
-            update() {
-                // Check for key presses and move the block accordingly
-                if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-                this.x -= this.speed;
-                }
-                if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-                this.x += this.speed;
-                }
-                if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-                this.y -= this.speed;
-                }
-                if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
-                this.y += this.speed;
-                }
-
-                // Constrain the block within the canvas boundaries
-                this.x = constrain(this.x, 0, width - blockSize);
-                this.y = constrain(this.y, 0, height - blockSize);
-            }
-
-            show() {
-                fill(255, 0, 0); // Red color
-                rect(this.x, this.y, blockSize, blockSize); // Draw the block
-            }
-        }
-
+        console.log(script)
+        document.head.appendChild(script);
 
         // Clean up function to remove the script when the component unmounts
         return () => {
-            document.body.removeChild(script);
+            document.head.removeChild(script);
         };
     }, []);
+
+    let x = 100;
+    let y = 100;
+
+    function setup() {
+        createCanvas(512, 512);
+        fill(255, 0, 0);
+    }
+
+    function draw() {
+        if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
+            x -= 5;
+        }
+
+        if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
+            x += 5;
+        }
+
+        if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
+            y -= 5;
+        }
+
+        if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
+            y += 5;
+        }
+
+        clear();
+        ellipse(x, y, 50, 50);
+        describe(`50-by-50 red ellipse moves left, right, up, and
+            down with arrow presses.`);
+    }
+
+
 
 
     // let movingRight = false;

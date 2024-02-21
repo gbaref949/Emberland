@@ -12,6 +12,7 @@
   "author": "Georgiana Barefield (https://github.com/gbaref949)",
   "license": "MIT",
   "dependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "p5": "^1.9.0"
   }
 }
