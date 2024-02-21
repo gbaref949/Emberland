@@ -101,6 +101,15 @@ table {
   color: rgb(216, 216, 216);
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  display: block;
+}
+
 body {
   background-color: #001528;
   background: linear-gradient(180deg, #025962 0%, rgba(0, 21, 40, 0) 100%);
