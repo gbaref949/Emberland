@@ -26,16 +26,24 @@ const Testing = () => {
             // moves the reactangle with smooth movement whenever the user presses the corresponding key
             p.keyPressed = ()=>{
                 if (p.keyCode === p.UP_ARROW || p.keyCode === 87) {
-                    up = setInterval(() => y-=2, 10);
+                    up = setInterval(() => {
+                        if(y >= 2) y-=2;
+                    }, 10);
                 }
                 if (p.keyCode === p.LEFT_ARROW || p.keyCode === 65) {
-                    left = setInterval(() => x-=2, 10);
+                    left = setInterval(() => {
+                        if(x >= 2) x-=2;
+                    }, 10);
                 }
                 if (p.keyCode === p.DOWN_ARROW || p.keyCode === 83) {
-                    down = setInterval(() => y+=2, 10);
+                    down = setInterval(() => {
+                        if(y <= p.height-50) y+=2;
+                    }, 10);
                 }
                 if (p.keyCode === p.RIGHT_ARROW || p.keyCode === 68) {
-                    right = setInterval(() => x+=2, 10);
+                    right = setInterval(() => {
+                        if(x <= p.width-50) x+=2;
+                    }, 10);
                 }
             }
 
