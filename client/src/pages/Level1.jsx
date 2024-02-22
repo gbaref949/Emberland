@@ -67,9 +67,13 @@ const Game = () => {
     new p5(sketch);
   }, []);
 
-  return <div id='game-container'>
-
-  </div>;
+  return (
+    <div id='game-container'>
+      <a href='/' className='btn'>
+        <p className='btn-text'>LOGOUT</p>
+      </a>
+    </div>
+  );
 };
 
 export default Game;

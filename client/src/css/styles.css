@@ -129,14 +129,20 @@ body {
 
 .btn {
   background-color: #025962;
-  text-align: center;
-  text-decoration: none;
   width: 10rem;
   height: 3rem;
   flex-shrink: 0;
   margin: 0 auto;
   position: fixed;
   top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.btn-text {
+  background-color: transparent;
+  position: fixed;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }/*# sourceMappingURL=styles.css.map */
