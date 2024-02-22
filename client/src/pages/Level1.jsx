@@ -68,7 +68,7 @@ const Game = () => {
   }, []);
 
   return (
-    <div id='game-container'>
+    <div id='game-container' className='game-container'>
       <a href='/' className='btn'>
         <p className='btn-text'>LOGOUT</p>
       </a>
