@@ -9,14 +9,12 @@ import Collision from './components/Collision'
 
 const router = createBrowserRouter([
   { path: '/', element: <Home /> },
-  // { path: '/game1', element: <Game1 /> },
   { path: '/game1', element: <Game1 /> },
+  { path: '/collision', element: <Collision /> },
   // { path: '/testing', element: <Testing /> },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
     <RouterProvider router={router} />
-  </React.StrictMode>
 );

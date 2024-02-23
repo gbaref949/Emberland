@@ -9,7 +9,7 @@ const Game = () => {
       let up, down, left, right;
 
       p.setup = () => {
-        p.createCanvas(400, 400);
+        p.createCanvas(window.innerWidth, window.innerHeight);
       };
 
       p.draw = () => {
