@@ -139,6 +139,18 @@ body {
   transform: translate(-50%, -50%);
 }
 
+.logout-btn {
+  background-color: #025962;
+  width: 10rem;
+  height: 3rem;
+  flex-shrink: 0;
+  margin: 0 auto;
+  position: fixed;
+  top: 5%;
+  left: 95%;
+  transform: translate(-50%, -50%);
+}
+
 .btn-text {
   background-color: transparent;
   position: fixed;

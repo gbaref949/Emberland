@@ -24,6 +24,14 @@ body{
     min-height: 100vh;
 }
 
+// .game-container{
+//     margin: 0 auto;
+//     position: fixed;
+//     top: 50%;
+//     left: 50%;
+//     transform: translate(-50%, -50%);
+// }
+
 .homeLogo{
     height: 620px;
     width: 650px;
@@ -35,7 +43,7 @@ body{
     background-color: #ffffff00;
 }
 
-.btn{
+.btn {
     background-color: #025962;
     width: 10rem;
     height: 3rem;
@@ -44,6 +52,18 @@ body{
     position: fixed;
     top: 80%;
     left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.logout-btn{
+    background-color: #025962;
+    width: 10rem;
+    height: 3rem;
+    flex-shrink: 0;
+    margin: 0 auto;
+    position: fixed;
+    top: 5%;
+    left: 95%;
     transform: translate(-50%, -50%);
 }
 

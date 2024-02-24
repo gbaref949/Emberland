@@ -69,7 +69,7 @@ const Game = () => {
 
   return (
     <div id='game-container' className='game-container'>
-      <a href='/' className='btn'>
+      <a href='/' className='logout-btn'>
         <p className='btn-text'>LOGOUT</p>
       </a>
     </div>
