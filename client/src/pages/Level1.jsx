@@ -1,65 +1,91 @@
 import React, { useEffect } from 'react';
 import p5 from 'p5';
 
+class Player {
+  constructor(x, y) {
+    this.x = 50;
+    this.y = 50;
+    this.speed = 5;
+    this.size = 50; // size of player
+  }
+
+  update(p) {
+    if (p.keyIsDown(65) && this.x > 0) this.x -= this.speed; // A key (move left)
+    if (p.keyIsDown(68) && this.x < p.width - this.size) this.x += this.speed; // D key (move right)
+    if (p.keyIsDown(87) && this.y > 0) this.y -= this.speed; // W key (move up)
+    if (p.keyIsDown(83) && this.y < p.height - this.size) this.y += this.speed; // S key (move down)
+  }
+
+  display(p) {
+    p.fill(255);
+    p.rect(this.x, this.y, this.size, this.size);
+  }
+
+  // Function to check collision with another object
+  collides(obj) {
+    return !(
+      this.x + this.size < obj.x ||
+      this.x > obj.x + obj.size ||
+      this.y + this.size < obj.y ||
+      this.y > obj.y + obj.size
+    );
+  }
+}
+
+class Enemy {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.speed = 1;
+    this.size = 50; // size of enemy
+  }
+
+  update(player) {
+    if (this.x < player.x) this.x += this.speed; // Move towards player (x direction)
+    else if (this.x > player.x) this.x -= this.speed;
+    if (this.y < player.y) this.y += this.speed; // Move towards player (y direction)
+    else if (this.y > player.y) this.y -= this.speed;
+  }
+
+  display(p) {
+    p.fill(255, 0, 0);
+    p.rect(this.x, this.y, this.size, this.size);
+  }
+}
+
 const Game = () => {
   useEffect(() => {
     const sketch = (p) => {
-      let x = 50;
-      let y = 50;
-      let up, down, left, right;
+      let player;
+      let enemy;
 
       p.setup = () => {
         p.createCanvas(window.innerWidth, window.innerHeight);
+        player = new Player(p.width / 2, p.height / 2);
+        enemy = new Enemy(p.width / 2, p.height / 2);
       };
 
       p.draw = () => {
         p.background(0);
-        p.fill(255);
-        p.rect(x, y, 50, 50);
+        player.update(p);
+        player.display(p);
+        enemy.update(player);
+        enemy.display(p);
+
+        // Check for collision between player and enemy
+        if (player.collides(enemy)) {
+          // Separate player and enemy if collision occurs
+          if (player.x < enemy.x) player.x -= player.speed;
+          else player.x += player.speed;
+          if (player.y < enemy.y) player.y -= player.speed;
+          else player.y += player.speed;
+        }
       };
 
-      //         if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-      //         if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-      //         if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-      //         if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
-
-      // moves the reactangle with smooth movement whenever the user presses the corresponding key
+      // Prevent default browser behavior for arrow keys
       p.keyPressed = () => {
-        if (p.keyCode === p.UP_ARROW || p.keyCode === 87) {
-          up = setInterval(() => {
-            if (y >= 2) y -= 2;
-          }, 10);
-        }
-        if (p.keyCode === p.LEFT_ARROW || p.keyCode === 65) {
-          left = setInterval(() => {
-            if (x >= 2) x -= 2;
-          }, 10);
-        }
-        if (p.keyCode === p.DOWN_ARROW || p.keyCode === 83) {
-          down = setInterval(() => {
-            if (y <= p.height - 50) y += 2;
-          }, 10);
-        }
-        if (p.keyCode === p.RIGHT_ARROW || p.keyCode === 68) {
-          right = setInterval(() => {
-            if (x <= p.width - 50) x += 2;
-          }, 10);
-        }
-      };
-
-      // stops the rectangle from moving when the user lets the key go
-      p.keyReleased = () => {
-        if (p.keyCode === p.UP_ARROW || p.keyCode === 87) {
-          clearInterval(up);
-        }
-        if (p.keyCode === p.LEFT_ARROW || p.keyCode === 65) {
-          clearInterval(left);
-        }
-        if (p.keyCode === p.DOWN_ARROW || p.keyCode === 83) {
-          clearInterval(down);
-        }
-        if (p.keyCode === p.RIGHT_ARROW || p.keyCode === 68) {
-          clearInterval(right);
+        if ([65, 68, 87, 83].includes(p.keyCode)) {
+          return false;
         }
       };
     };
