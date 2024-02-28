@@ -26,41 +26,81 @@ const Phase = () => {
     let cursors;
     let keys;
     let player;
+    let dashAvailable = true;
+    let dashTimer;
 
     function preload() {
-      // Load game assets here
-      this.load.image('player', '../pages.images/editedLogo.png');
+      this.load.image('player', '../pages/images/editedLogo.png');
     }
 
     function create() {
-      // Set up game objects and logic here
       player = this.physics.add.sprite(400, 300, 'player');
       player.setCollideWorldBounds(true);
       cursors = this.input.keyboard.createCursorKeys();
-      keys = this.input.keyboard.addKeys('W,S,A,D');
+      keys = {
+        W: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+        A: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+        S: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+        D: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+        SHIFT: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT),
+      };
     }
 
     function update() {
-      // Update game state here
+      handleMovement();
+    }
+
+    function handleMovement() {
+      const speed = 150;
+
       if (cursors.left.isDown || keys.A.isDown) {
-        player.setVelocityX(-200);
+        player.setVelocityX(-speed);
       } else if (cursors.right.isDown || keys.D.isDown) {
-        player.setVelocityX(200);
+        player.setVelocityX(speed);
       } else {
         player.setVelocityX(0);
       }
 
       if (cursors.up.isDown || keys.W.isDown) {
-        player.setVelocityY(-200);
+        player.setVelocityY(-speed);
       } else if (cursors.down.isDown || keys.S.isDown) {
-        player.setVelocityY(200);
+        player.setVelocityY(speed);
       } else {
         player.setVelocityY(0);
       }
+
+      // Check for dash input
+      if (keys.SHIFT.isDown && dashAvailable) {
+        dashAvailable = false;
+        dash();
+      }
+    }
+
+    function dash() {
+      const dashDistance = 50;
+
+      // Set the new position (simulate dash)
+      player.x += (cursors.left.isDown || keys.A.isDown) ? -dashDistance :
+                  (cursors.right.isDown || keys.D.isDown) ? dashDistance : 0;
+      player.y += (cursors.up.isDown || keys.W.isDown) ? -dashDistance :
+                  (cursors.down.isDown || keys.S.isDown) ? dashDistance : 0;
+
+      // Reset the position after a short duration
+      dashTimer = player.scene.time.addEvent({
+        delay: 300,
+        callback: () => {
+          dashTimer.destroy();
+          // Start the cooldown timer for dashAvailable
+          player.scene.time.delayedCall(2700, () => {
+            dashAvailable = true;
+          });
+        },
+        callbackScope: this,
+        loop: false,
+      });
     }
 
     return () => {
-      // Cleanup when the component is unmounted
       game.destroy(true);
     };
   }, []);
