@@ -4,6 +4,7 @@ import './css/styles.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
+import Collision from './components/Collision';
 import Phase from './components/Phase';
 import Enemies from './components/Enemies';
 import Level1 from './pages/Level1';
