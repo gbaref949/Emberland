@@ -19,7 +19,6 @@ const router = createBrowserRouter([
   { path: '/level1', element: <Level1 /> },
   { path: '/level2', element: <Level2 /> },
   { path: '/level3', element: <Level3 /> },
-  
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

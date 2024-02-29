@@ -1,5 +1,5 @@
 //imported scss partials
-@import "./partials/reset", "./partials/dashboard", "./partials/utillities";
+@import "./partials/reset", "./partials/nav", "./partials/dashboard", "./partials/utillities";
 
 //here's the json path
 // "savePath": "/client/src/css"
@@ -7,15 +7,6 @@
 *{
     background-color: #001528;
     color: rgb(216, 216, 216);
-}
-
-html, body {
-    margin: 0;
-    padding: 0;
-}
-
-canvas {
-    display: block;
 }
 
 body{

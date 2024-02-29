@@ -4,8 +4,8 @@ const GameDashboard = () => {
   // Define initial player state using React useState hook
   const [player, setPlayer] = useState({
     name: "John Doe",
-    level: 5,
-    score: 5000
+    level: 0,
+    score: 0
   });
 
   // Function to handle clicks on game menu items
@@ -46,7 +46,7 @@ const GameDashboard = () => {
       <div className="game-menu">
         <h2>Game Menu</h2>
         <ul>
-          <li><a href="./" onClick={(event) => handleGameMenuClick(event, "Play Game")}>Play Game</a></li>
+          <li><a href="./game1" onClick={(event) => handleGameMenuClick(event, "Play Game")}>Play Game</a></li>
           <li><a href="./" onClick={(event) => handleGameMenuClick(event, "Leaderboard")}>Leaderboard</a></li>
           <li><a href="./" onClick={(event) => handleGameMenuClick(event, "Achievements")}>Achievements</a></li>
         </ul>
