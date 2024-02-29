@@ -23,10 +23,10 @@ const Enemies = () => {
     };
 
     const game = new Phaser.Game(config);
-    let cursors;
-    let keys;
-    let player;
+    let cursors, keys;
+    let player, block1;
     let dashAvailable = true;
+    let inDash = false;
     let dashTimer;
 
     function preload() {
@@ -36,6 +36,19 @@ const Enemies = () => {
     function create() {
       player = this.physics.add.sprite(400, 300, 'player');
       player.setCollideWorldBounds(true);
+
+      block1 = this.physics.add.sprite(200, 300, 'block');
+
+      // Set block1 to be immovable (it won't be affected by collisions)
+      block1.setImmovable(true);
+      block1.setScale(3);
+
+      // Add a collider to handle collisions between blocks
+      this.physics.add.collider(block1, player);
+
+      // Set collide world bounds for both blocks
+      block1.setCollideWorldBounds(true);
+
       cursors = this.input.keyboard.createCursorKeys();
       keys = {
         W: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
@@ -46,19 +59,28 @@ const Enemies = () => {
       };
     }
 
+    function handleCollision() {
+      console.log('Collision occurred!');
+      // Additional logic to handle the collision
+    }
+
     function update() {
-      handleMovement();
+      if(!inDash) {
+        handleMovement();
+      }
     }
 
     function handleMovement() {
       const speed = 150;
+      const friction = 0.8; // Adjust the friction factor as needed
 
       if (cursors.left.isDown || keys.A.isDown) {
         player.setVelocityX(-speed);
       } else if (cursors.right.isDown || keys.D.isDown) {
         player.setVelocityX(speed);
       } else {
-        player.setVelocityX(0);
+        // Apply friction to gradually slow down the player if no movement input
+        player.setVelocityX(player.body.velocity.x * friction);
       }
 
       if (cursors.up.isDown || keys.W.isDown) {
@@ -66,39 +88,56 @@ const Enemies = () => {
       } else if (cursors.down.isDown || keys.S.isDown) {
         player.setVelocityY(speed);
       } else {
-        player.setVelocityY(0);
+        // Apply friction to gradually slow down the player if no movement input
+        player.setVelocityY(player.body.velocity.y * friction);
       }
 
       // Check for dash input
       if (keys.SHIFT.isDown && dashAvailable) {
         dashAvailable = false;
+        inDash = true;
         dash();
       }
     }
 
     function dash() {
-      const dashDistance = 50;
+      const dashDistance = 500;
+      let dashX = 0;
+      let dashY = 0;
+
+      if (cursors.left.isDown || keys.A.isDown) {
+        dashX = -dashDistance;
+      } else if (cursors.right.isDown || keys.D.isDown) {
+        dashX = dashDistance;
+      }
+
+      if (cursors.up.isDown || keys.W.isDown) {
+        dashY = -dashDistance;
+      } else if (cursors.down.isDown || keys.S.isDown) {
+        dashY = dashDistance;
+      }
 
       // Set the new position (simulate dash)
-      player.x += (cursors.left.isDown || keys.A.isDown) ? -dashDistance :
-                  (cursors.right.isDown || keys.D.isDown) ? dashDistance : 0;
-      player.y += (cursors.up.isDown || keys.W.isDown) ? -dashDistance :
-                  (cursors.down.isDown || keys.S.isDown) ? dashDistance : 0;
+      player.setVelocity(dashX, dashY);
 
       // Reset the position after a short duration
       dashTimer = player.scene.time.addEvent({
-        delay: 300,
+        delay: 100, // Adjust the delay as needed
         callback: () => {
           dashTimer.destroy();
-          // Start the cooldown timer for dashAvailable
-          player.scene.time.delayedCall(2700, () => {
+          // allows the player to move again
+          setTimeout(()=>{
+            inDash = false
+          }, 100);
+          setTimeout(()=>{
             dashAvailable = true;
-          });
+          }, 2900);
         },
         callbackScope: this,
         loop: false,
       });
     }
+
 
     return () => {
       game.destroy(true);
