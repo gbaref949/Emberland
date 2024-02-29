@@ -28,6 +28,7 @@ app.route('/').get((req, res) =>{
     res.send("Welcome");
 });
 app.post("/login", login);
+app.use('/', require('./routes/people-controller'));
 app.route('/docs').get((req, res) =>{
     // Import your mongoose model
 }).post((req, res) =>{
