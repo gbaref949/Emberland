@@ -3,18 +3,22 @@ import ReactDOM from 'react-dom/client';
 import './css/styles.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';
-import Game1 from './pages/Level1';
-import Collision from './components/Collision'
-// import Testing from './components/Testing';
+import Dashboard from './pages/Dashboard';
 import Phase from './components/Phase';
 import Enemies from './components/Enemies';
+import Level1 from './pages/Level1';
+import Level2 from './pages/Level2';
+import Level3 from './pages/Level3';
 
 const router = createBrowserRouter([
   { path: '/', element: <Home /> },
-  // { path: '/game1', element: <Game1 /> },
+  { path: '/dashboard', element: <Dashboard /> },
   { path: '/game1', element: <Enemies /> },
   { path: '/collision', element: <Collision /> },
-  // { path: '/testing', element: <Testing /> },
+  { path: '/level1', element: <Level1 /> },
+  { path: '/level2', element: <Level2 /> },
+  { path: '/level3', element: <Level3 /> },
+  
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
