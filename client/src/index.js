@@ -7,9 +7,9 @@ import Dashboard from './pages/Dashboard';
 import Collision from './components/Collision';
 import Phase from './components/Phase';
 import Enemies from './components/Enemies';
-import Level1 from './pages/Level1';
-import Level2 from './pages/Level2';
-import Level3 from './pages/Level3';
+import Level1 from './components/PhaseL1';
+import Level2 from './components/PhaseL2';
+import Level3 from './components/PhaseL3';
 
 const router = createBrowserRouter([
   { path: '/', element: <Home /> },
@@ -19,7 +19,6 @@ const router = createBrowserRouter([
   { path: '/level1', element: <Level1 /> },
   { path: '/level2', element: <Level2 /> },
   { path: '/level3', element: <Level3 /> },
-  
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -152,15 +152,6 @@ a:hover {
   color: rgb(216, 216, 216);
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-}
-
-canvas {
-  display: block;
-}
-
 body {
   display: flex;
   justify-content: center;

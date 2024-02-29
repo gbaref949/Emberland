@@ -1,15 +1,14 @@
-import bckg from './images/editedLogo.png'
+import bckg from './images/editedLogo.png';
 
-const P5 = () => {
-
+const Home = () => {
   return (
     <>
       <img src={bckg} alt='game logo' className='homeLogo' />
-      <a href='./game1' className='btn'>
+      <a href='./dashboard' className='btn'>
         <p className='btn-text'>PLAY</p>
       </a>
     </>
-  );
+  )
 }
 
-export default P5
+export default Home
