@@ -19,6 +19,9 @@ canvas {
 }
 
 body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #001528;
     background: linear-gradient(180deg, #025962 0%, rgba(0, 21, 40, 0.00) 100%);
     min-height: 100vh;

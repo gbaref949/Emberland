@@ -5,7 +5,7 @@ class Player {
   constructor(x, y) {
     this.x = 50;
     this.y = 50;
-    this.speed = 5;
+    this.speed = 10;
     this.size = 50; // size of player
   }
 

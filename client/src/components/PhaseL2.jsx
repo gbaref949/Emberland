@@ -6,8 +6,8 @@ const Phase = () => {
 
     const config = {
       type: Phaser.AUTO,
-      width: 770, //this is a 77/260 multiplier on the figma
-      height: 770, //this is a 77/260 multiplier of the figma
+      width: 770, //this is a 0.35 multiplier on the figma
+      height: 770, //this is a 0.35 multiplier of the figma
       scene: {
         preload: preload,
         create: create,
@@ -34,54 +34,25 @@ const Phase = () => {
     }
 
     function create() {
-      let mult = (77/260);
       player = this.physics.add.sprite(385, 385, 'player');
-      player.setScale(mult/0.35);
+      player.setScale(1);
       player.setCollideWorldBounds(true);
     
       // Create a blue block at the center of the canvas
-      let blockValues = [
-      [500*mult, 700*mult, 200*mult, 600*mult],
-      [800*mult, 500*mult, 400*mult, 200*mult],
-      [2100*mult, 700*mult, 200*mult, 600*mult],
-      [1800*mult, 500*mult, 400*mult, 200*mult],
-      [500*mult, 1900*mult, 200*mult, 600*mult],
-      [800*mult, 2100*mult, 400*mult, 200*mult],
-      [2100*mult, 1900*mult, 200*mult, 600*mult],
-      [1800*mult, 2100*mult, 400*mult, 200*mult],
-      [900*mult, 1000*mult, 200*mult, 400*mult],
-      [900*mult, 1600*mult, 200*mult, 400*mult],
-      [1700*mult, 1000*mult, 200*mult, 400*mult],
-      [1700*mult, 1600*mult, 200*mult, 400*mult],
-      [1100*mult, 900*mult, 200*mult, 200*mult],
-      [1500*mult, 900*mult, 200*mult, 200*mult],
-      [1500*mult, 1700*mult, 200*mult, 200*mult],
-      [1100*mult, 1700*mult, 200*mult, 200*mult]
-    ];
-      // const block = this.add.rectangle(500*mult, 700*mult, 200*mult, 600*mult, 0x0000ff);
-      // const block2 = this.add.rectangle(800*mult, 500*mult, 400*mult, 200*mult, 0x0000ff);
-      // const block3 = this.add.rectangle(2100*mult, 700*mult, 200*mult, 600*mult, 0x0000ff);
-      // const block4 = this.add.rectangle(1800*mult, 500*mult, 400*mult, 200*mult, 0x0000ff);
-      // const block5 = this.add.rectangle(500*mult, 1900*mult, 200*mult, 600*mult, 0x0000ff);
-      // const block6 = this.add.rectangle(800*mult, 2100*mult, 400*mult, 200*mult, 0x0000ff);
-      // const block7 = this.add.rectangle(2100*mult, 1900*mult, 200*mult, 600*mult, 0x0000ff);
-      // const block8 = this.add.rectangle(1800*mult, 2100*mult, 400*mult, 200*mult, 0x0000ff);
-      // const block9 = this.add.rectangle(900*mult, 1000*mult, 200*mult, 400*mult, 0x0000ff);
-      // const block10 = this.add.rectangle(900*mult, 1600*mult, 200*mult, 400*mult, 0x0000ff);
-      // const block11 = this.add.rectangle(1700*mult, 1000*mult, 200*mult, 400*mult, 0x0000ff);
-      // const block12 = this.add.rectangle(1700*mult, 1600*mult, 200*mult, 400*mult, 0x0000ff);
-      // const block13 = this.add.rectangle(1100*mult, 900*mult, 200*mult, 200*mult, 0x0000ff);
-      // const block14 = this.add.rectangle(1500*mult, 900*mult, 200*mult, 200*mult, 0x0000ff);
-      // const block15 = this.add.rectangle(1500*mult, 1700*mult, 200*mult, 200*mult, 0x0000ff);
-      // const block16 = this.add.rectangle(1100*mult, 1700*mult, 200*mult, 200*mult, 0x0000ff);
-      let blocks = [];
-      let temp;
-      for(let i=0;i<16;i++){
-        temp = this.add.rectangle(blockValues[i][0], blockValues[i][1], blockValues[i][2], blockValues[i][3], 0x0000ff);
-        this.physics.add.existing(temp, true);
-        this.physics.add.collider(player, temp);
-        blocks.push(temp);
-      }
+      const block = this.add.rectangle(210, 245, 140, 210, 0x0000ff);
+      const block2 = this.add.rectangle(560, 525, 140, 210, 0x0000ff);
+      const block3 = this.add.rectangle(7.5*70, 210, 210, 140, 0x0000ff);
+      const block4 = this.add.rectangle(245, 560, 210, 140, 0x0000ff);
+      this.physics.add.existing(block, true); // Enable physics and make it immovable
+      this.physics.add.existing(block2, true);
+      this.physics.add.existing(block3, true);
+      this.physics.add.existing(block4, true);
+    
+      // Define collisions between player and block
+      this.physics.add.collider(player, block);
+      this.physics.add.collider(player, block2);
+      this.physics.add.collider(player, block3);
+      this.physics.add.collider(player, block4);
     
       cursors = this.input.keyboard.createCursorKeys();
       keys = {
