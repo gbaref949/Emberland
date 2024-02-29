@@ -1,0 +1,55 @@
+// Define variables for common styles
+$box-padding: 20px;
+$box-border-radius: 5px;
+$box-margin: 0 10px; // Margin between boxes
+
+.dashboard {
+    display: flex;
+    justify-content: space-around;
+    padding: $box-padding;
+}
+
+.player-profile,
+.game-menu,
+.settings-menu {
+    flex: 1;
+    background-color: #f0f0f0;
+    padding: $box-padding;
+    border-radius: $box-border-radius;
+}
+
+.player-profile {
+    margin-right: $box-margin; // Add margin for spacing
+}
+
+.game-menu {
+    margin: 0 $box-margin; // Add margin for spacing
+}
+
+.settings-menu {
+    margin-left: $box-margin; // Add margin for spacing
+}
+
+.player-profile h2,
+.game-menu h2,
+.settings-menu h2 {
+    margin-top: 0;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    margin-bottom: 10px;
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+a:hover {
+    color: #666;
+}

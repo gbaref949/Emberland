@@ -96,6 +96,57 @@ table {
   border-spacing: 0;
 }
 
+.dashboard {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.player-profile,
+.game-menu,
+.settings-menu {
+  flex: 1;
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.player-profile {
+  margin-right: 0 10px;
+}
+
+.game-menu {
+  margin: 0 0 10px;
+}
+
+.settings-menu {
+  margin-left: 0 10px;
+}
+
+.player-profile h2,
+.game-menu h2,
+.settings-menu h2 {
+  margin-top: 0;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul li {
+  margin-bottom: 10px;
+}
+
+a {
+  text-decoration: none;
+  color: #333;
+}
+
+a:hover {
+  color: #666;
+}
+
 * {
   background-color: #001528;
   color: rgb(216, 216, 216);
