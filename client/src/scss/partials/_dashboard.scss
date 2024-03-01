@@ -2,6 +2,15 @@ $box-padding: 20px;
 $box-border-radius: 5px;
 $box-margin: 20px;
 
+.title{
+    position: fixed;
+    font-size: 64px;
+    top: 25%;
+    left: 50%;
+    color: rgb(32, 32, 32);
+    transform: translate(-50%, -50%);
+}
+
 .dashboard {
     display: flex;
     justify-content: space-between;

@@ -21,6 +21,7 @@ const Dashboard = () => {
 
   return (
     <div className='dashboard'>
+      <h1 className='title'>Dashboard</h1>
       {/* Player Profile */}
       <div className='player-profile'>
         <h2>Player Profile</h2>

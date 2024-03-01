@@ -96,6 +96,15 @@ table {
   border-spacing: 0;
 }
 
+.title {
+  position: fixed;
+  font-size: 64px;
+  top: 25%;
+  left: 50%;
+  color: rgb(32, 32, 32);
+  transform: translate(-50%, -50%);
+}
+
 .dashboard {
   display: flex;
   justify-content: space-between;
@@ -193,7 +202,6 @@ body {
 }
 
 .btn-text {
-  background-color: transparent;
   position: fixed;
   top: 50%;
   left: 50%;
