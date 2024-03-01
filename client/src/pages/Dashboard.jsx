@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const GameDashboard = () => {
+const Dashboard = () => {
   // Define initial player state using React useState hook
   const [player, setPlayer] = useState({
     name: 'John Doe',
@@ -17,6 +17,10 @@ const GameDashboard = () => {
       console.log('Starting the game...');
       // Redirect to the game page
       window.location.href = './level1';
+    } else if (menuItem === 'Logout') {
+      console.log('Logging out...');
+      // Redirect to the homepage
+      window.location.href = '/';
     } else {
       console.log('Unknown menu item clicked');
     }
@@ -63,9 +67,9 @@ const GameDashboard = () => {
           <li>
             <a
               href='./'
-              onClick={(event) => handleGameMenuClick(event, 'Achievements')}
+              onClick={(event) => handleGameMenuClick(event, 'Logout')}
             >
-              Achievements
+              Logout
             </a>
           </li>
         </ul>
@@ -90,4 +94,4 @@ const GameDashboard = () => {
   );
 };
 
-export default GameDashboard;
+export default Dashboard;
