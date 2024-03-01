@@ -1,13 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 const Dashboard = () => {
-  // Define initial player state using React useState hook
-  const [player, setPlayer] = useState({
-    name: 'John Doe',
-    level: 0,
-    score: 0,
-  });
-
   // Function to handle clicks on game menu items
   function handleGameMenuClick(event, menuItem) {
     event.preventDefault();
@@ -33,13 +26,13 @@ const Dashboard = () => {
         <h2>Player Profile</h2>
         <div className='profile-info'>
           <p>
-            <strong>Name:</strong> {player.name}
+            <strong>Name:</strong> John Doe
           </p>
           <p>
-            <strong>Level:</strong> {player.level}
+            <strong>Level:</strong> 0
           </p>
           <p>
-            <strong>Score:</strong> {player.score}
+            <strong>Score:</strong> 0
           </p>
         </div>
       </div>
