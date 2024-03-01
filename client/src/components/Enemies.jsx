@@ -34,22 +34,21 @@ const Enemies = () => {
         }
 
         function create() {
+            block1 = this.physics.add.sprite(200, 300, 'block');
+
             player = this.physics.add.sprite(400, 300, 'player');
             player.setCollideWorldBounds(true);
 
-            
-            block1 = this.physics.add.sprite(200, 300, 'block');
-            
             enemy = this.physics.add.sprite(600, 600, 'enemy');
             enemy.setCollideWorldBounds(true);
-            
+
             // Set block1 to be immovable (it won't be affected by collisions)
             block1.setImmovable(true);
             block1.setScale(3);
             this.physics.add.collider(player, enemy, handlePlayerCollision);
 
             // Add a collider to handle collisions between blocks
-            this.physics.add.collider(block1, player, handleFallCollision);
+            this.physics.add.overlap(block1, player, handleFallCollision);
             this.physics.add.collider(enemy, player);
 
             // Set collide world bounds for both blocks
@@ -74,8 +73,15 @@ const Enemies = () => {
         }
 
         function handleFallCollision(){
-            player.x = 100;
-            player.y = 100;
+            // Calculate the overlap area based on the distance between the centers
+            const overlapX = Math.abs(player.x - block1.x) - (player.width + block1.width) / 2;
+            const overlapY = Math.abs(player.y - block1.y) - (player.height + block1.height) / 2;
+
+            // If at least half of the player sprite is inside the block sprite
+            if (overlapX < 0 && overlapY < 0) {
+                player.x = 100;
+                player.y = 100;
+            }
         }
 
         function handlePlayerCollision() {
