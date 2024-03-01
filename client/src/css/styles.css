@@ -55,7 +55,6 @@ summary {
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
   vertical-align: baseline;
 }
 
@@ -96,56 +95,119 @@ table {
   border-spacing: 0;
 }
 
-.title {
-  position: fixed;
-  font-size: 64px;
-  top: 25%;
-  left: 50%;
-  color: rgb(32, 32, 32);
-  transform: translate(-50%, -50%);
-}
-
-.dashboard {
+.dashBoardCont {
+  width: 100vw;
+  height: 100vh;
   display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+.dashBoardCont .dashboard {
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  width: 75vw;
+  width: 85vw;
+  height: 100%;
   padding: 20px;
   color: rgb(32, 32, 32);
 }
-
-.player-profile,
-.game-menu,
-.settings-menu {
+.dashBoardCont .dashboard .title {
+  font-size: 5rem;
+  color: rgb(32, 32, 32);
+  color: white;
+  text-align: center;
+}
+.dashBoardCont .dashboard .imgCont {
+  text-align: center;
+}
+.dashBoardCont .dashboard .imgCont .dashBoardImg {
+  width: 35%;
+  height: auto;
+}
+.dashBoardCont .dashboard .sections {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.dashBoardCont .dashboard .sections .player-profile {
   flex: 1;
   background-color: #f0f0f0;
   padding: 20px;
   border-radius: 5px;
   margin: 0 20px;
+  width: 6rem;
 }
-
-.player-profile h2,
-.game-menu h2,
-.settings-menu h2 {
+.dashBoardCont .dashboard .sections .player-profile h2 {
   margin-top: 0;
-  font-size: 32px;
+  font-size: 2.5rem;
   margin-bottom: 1.5rem;
+  color: rgb(32, 32, 32);
 }
-
-ul {
+.dashBoardCont .dashboard .sections .player-profile .profile-info p {
+  color: rgb(32, 32, 32);
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+.dashBoardCont .dashboard .sections .player-profile .profile-info p strong {
+  color: rgb(32, 32, 32);
+}
+.dashBoardCont .dashboard .sections .game-menu {
+  flex: 1;
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 5px;
+  margin: 0 20px;
+  width: 6rem;
+}
+.dashBoardCont .dashboard .sections .game-menu h2 {
+  margin-top: 0;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: rgb(32, 32, 32);
+}
+.dashBoardCont .dashboard .sections .game-menu ul {
   list-style-type: none;
   padding: 0;
 }
-
-ul li {
+.dashBoardCont .dashboard .sections .game-menu ul li {
   margin-bottom: 10px;
+  font-size: 1.5rem;
 }
-
-a {
+.dashBoardCont .dashboard .sections .game-menu ul li a {
   text-decoration: none;
   color: rgb(32, 32, 32);
 }
-
-a:hover {
+.dashBoardCont .dashboard .sections .game-menu ul li a:hover {
+  color: #666;
+  text-decoration: underline;
+}
+.dashBoardCont .dashboard .sections .settings-menu {
+  flex: 1;
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 5px;
+  margin: 0 20px;
+  width: 6rem;
+}
+.dashBoardCont .dashboard .sections .settings-menu h2 {
+  margin-top: 0;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: rgb(32, 32, 32);
+}
+.dashBoardCont .dashboard .sections .settings-menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+.dashBoardCont .dashboard .sections .settings-menu ul li {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+.dashBoardCont .dashboard .sections .settings-menu ul li a {
+  text-decoration: none;
+  color: rgb(32, 32, 32);
+}
+.dashBoardCont .dashboard .sections .settings-menu ul li a:hover {
   color: #666;
   text-decoration: underline;
 }
@@ -154,6 +216,8 @@ a:hover {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  color: rgb(216, 216, 216);
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
@@ -163,6 +227,7 @@ body {
   background-color: #001528;
   background: linear-gradient(180deg, #025962 0%, rgba(0, 21, 40, 0) 100%);
   min-height: 100vh;
+  background-color: #001528;
   color: rgb(216, 216, 216);
 }
 

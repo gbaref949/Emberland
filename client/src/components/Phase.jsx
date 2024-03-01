@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Phase = () => {
+  const navigate = useNavigate();
   const healthRef = useRef(100);
   useEffect(() => {
     const Phaser = require('phaser');
@@ -107,7 +109,7 @@ const Phase = () => {
       player.x = 385;
       player.y = 385;
       if (healthRef.current <= 0) {
-        window.location.replace("http://localhost:3000/gameover");
+        navigate('/gameOver')
       }
     }
 

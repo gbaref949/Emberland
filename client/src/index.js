@@ -15,6 +15,7 @@ import GameOver from './components/GameOver';
 const router = createBrowserRouter([
   { path: '/', element: <Home /> },
   { path: '/dashboard', element: <Dashboard /> },
+  { path: '/gameOver', element: <GameOver /> },
   { path: '/game1', element: <Enemies /> },
   { path: '/phase', element: <Phase /> },
   { path: '/collision', element: <Collision /> },

@@ -2,56 +2,143 @@ $box-padding: 20px;
 $box-border-radius: 5px;
 $box-margin: 20px;
 
-.title{
-    position: fixed;
-    font-size: 64px;
-    top: 25%;
-    left: 50%;
-    color: rgb(32, 32, 32);
-    transform: translate(-50%, -50%);
-}
-
-.dashboard {
+.dashBoardCont{
+    width: 100vw;
+    height: 100vh;
     display: flex;
-    justify-content: space-between;
-    width: 75vw;
-    padding: $box-padding;
-    color: rgb(32, 32, 32);
-}
+    justify-content: center;
+    align-items: flex-end;
 
-.player-profile,
-.game-menu,
-.settings-menu {
-    flex: 1;
-    background-color: #f0f0f0;
-    padding: $box-padding;
-    border-radius: $box-border-radius;
-    margin: 0 $box-margin;
-}
+    .dashboard {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 85vw;
+        height: 100%;
+        padding: $box-padding;
+        color: rgb(32, 32, 32);
 
-.player-profile h2,
-.game-menu h2,
-.settings-menu h2 {
-    margin-top: 0;
-    font-size: 32px;
-    margin-bottom: 1.5rem;
-}
+        .title {
+            font-size: 5rem;
+            color: rgb(32, 32, 32);
+            color: white;
+            text-align: center;
+        }
 
-ul {
-    list-style-type: none;
-    padding: 0;
-}
+        .imgCont{
+            text-align: center;
 
-ul li {
-    margin-bottom: 10px;
-}
+            .dashBoardImg {
+                width: 35%;
+                height: auto;
+            }
+        }
 
-a {
-    text-decoration: none;
-    color: rgb(32, 32, 32);
-}
+        .sections{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
 
-a:hover {
-    color: #666;
-    text-decoration: underline;
+            .player-profile {
+                flex: 1;
+                background-color: #f0f0f0;
+                padding: $box-padding;
+                border-radius: $box-border-radius;
+                margin: 0 $box-margin;
+                width: 6rem;
+        
+                h2 {
+                    margin-top: 0;
+                    font-size: 2.5rem;
+                    margin-bottom: 1.5rem;
+                    color: rgb(32, 32, 32);
+                }
+        
+                .profile-info {
+                    p {
+                        color: rgb(32, 32, 32);
+                        margin-bottom: 10px;
+                        font-size: 1.5rem;
+        
+                        strong {
+                            color: rgb(32, 32, 32);
+                        }
+                    }
+        
+                }
+            }
+        
+            .game-menu {
+                flex: 1;
+                background-color: #f0f0f0;
+                padding: $box-padding;
+                border-radius: $box-border-radius;
+                margin: 0 $box-margin;
+                width: 6rem;
+        
+                h2 {
+                    margin-top: 0;
+                    font-size: 2.5rem;
+                    margin-bottom: 1.5rem;
+                    color: rgb(32, 32, 32);
+                }
+        
+                ul {
+                    list-style-type: none;
+                    padding: 0;
+        
+                    li {
+                        margin-bottom: 10px;
+                        font-size: 1.5rem;
+        
+                        a {
+                            text-decoration: none;
+                            color: rgb(32, 32, 32);
+                        }
+        
+                        a:hover {
+                            color: #666;
+                            text-decoration: underline;
+                        }
+                    }
+                }
+            }
+        
+            .settings-menu {
+                flex: 1;
+                background-color: #f0f0f0;
+                padding: $box-padding;
+                border-radius: $box-border-radius;
+                margin: 0 $box-margin;
+                width: 6rem;
+        
+                h2 {
+                    margin-top: 0;
+                    font-size: 2.5rem;
+                    margin-bottom: 1.5rem;
+                    color: rgb(32, 32, 32);
+                }
+        
+                ul {
+                    list-style-type: none;
+                    padding: 0;
+        
+                    li {
+                        margin-bottom: 10px;
+                        font-size: 1.5rem;
+        
+                        a {
+                            text-decoration: none;
+                            color: rgb(32, 32, 32);
+                        }
+        
+                        a:hover {
+                            color: #666;
+                            text-decoration: underline;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
