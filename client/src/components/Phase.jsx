@@ -102,10 +102,13 @@ const Phase = () => {
     }
 
     function handleFallCollision() {
-      healthRef.current -= 20; // Updating health using ref
+      healthRef.current -= 20;
       healthText.setText(`Health: ${healthRef.current}`);
       player.x = 385;
       player.y = 385;
+      if (healthRef.current <= 0) {
+        window.location.replace("http://localhost:3000/gameover");
+      }
     }
 
     function handleMovement() {
@@ -163,7 +166,11 @@ const Phase = () => {
     };
   }, []);
 
-  return <div id="game-container"></div>;
+  return (
+    <div>
+      <div id="game-container"></div>
+    </div>
+  );
 };
 
 export default Phase;

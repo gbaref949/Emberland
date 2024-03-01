@@ -10,6 +10,7 @@ import Enemies from './components/Enemies';
 import Level1 from './components/PhaseL1';
 import Level2 from './components/PhaseL2';
 import Level3 from './components/PhaseL3';
+import GameOver from './components/GameOver';
 
 const router = createBrowserRouter([
   { path: '/', element: <Home /> },
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
   { path: '/game1', element: <Enemies /> },
   { path: '/phase', element: <Phase /> },
   { path: '/collision', element: <Collision /> },
+  { path: '/gameover', element: <GameOver /> },
   { path: '/level1', element: <Level1 /> },
   { path: '/level2', element: <Level2 /> },
   { path: '/level3', element: <Level3 /> },

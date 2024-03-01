@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const Phase = () => {
+  const healthRef = useRef(100);
   useEffect(() => {
     const Phaser = require('phaser');
 
@@ -28,6 +29,7 @@ const Phase = () => {
     let player;
     let dashAvailable = true;
     let dashTimer;
+    let healthText;
 
     function preload() {
       this.load.image('player', '../pages/images/editedLogo.png');
@@ -35,6 +37,7 @@ const Phase = () => {
 
     function create() {
       let mult = (77/260);
+      healthText = this.add.text(0, 0, `Health: 100`, { fontFamily: 'Arial', fontSize: '32px', fill: '#ffffff' });
       player = this.physics.add.sprite(385, 385, 'player');
       player.setScale(mult/0.35);
       player.setCollideWorldBounds(true);
@@ -79,7 +82,7 @@ const Phase = () => {
       for(let i=0;i<16;i++){
         temp = this.add.rectangle(blockValues[i][0], blockValues[i][1], blockValues[i][2], blockValues[i][3], 0x0000ff);
         this.physics.add.existing(temp, true);
-        this.physics.add.collider(player, temp);
+        this.physics.add.collider(player, temp, handleFallCollision);
         blocks.push(temp);
       }
     
@@ -96,6 +99,13 @@ const Phase = () => {
 
     function update() {
       handleMovement();
+    }
+
+    function handleFallCollision() {
+      healthRef.current -= 20; // Updating health using ref
+      healthText.setText(`Health: ${healthRef.current}`);
+      player.x = 385;
+      player.y = 385;
     }
 
     function handleMovement() {
