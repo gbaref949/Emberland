@@ -1,12 +1,11 @@
 import bckg from './images/editedLogo.png';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   return (
     <>
       <img src={bckg} alt='game logo' className='homeLogo' />
-      <a href='./dashboard' className='btn'>
-        <p className='btn-text'>PLAY</p>
-      </a>
+      <Link to={'/dashboard'} className='btn'><p className='btn-text'>PLAY</p></Link>
     </>
   )
 }

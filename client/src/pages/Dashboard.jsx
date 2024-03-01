@@ -1,22 +1,13 @@
 import React from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   // Function to handle clicks on game menu items
   function handleGameMenuClick(event, menuItem) {
     event.preventDefault();
 
-    // Handle redirection for "Play Game" menu item
-    if (menuItem === 'Play Game') {
-      console.log('Starting the game...');
-      // Redirect to the game page
-      window.location.href = './level1';
-    } else if (menuItem === 'Logout') {
-      console.log('Logging out...');
-      // Redirect to the homepage
-      window.location.href = '/';
-    } else {
-      console.log('Unknown menu item clicked');
-    }
+    navigate(`${menuItem}`);
   }
 
   return (
@@ -43,28 +34,13 @@ const Dashboard = () => {
         <h2>Game Menu</h2>
         <ul>
           <li>
-            <a
-              href='./level1'
-              onClick={(event) => handleGameMenuClick(event, 'Play Game')}
-            >
-              Play Game
-            </a>
+            <Link to={'/level1'}>Play Game</Link>
           </li>
           <li>
-            <a
-              href='./'
-              onClick={(event) => handleGameMenuClick(event, 'Leaderboard')}
-            >
-              Leaderboard
-            </a>
+            <Link to={'/dashboard'}>Leaderboard</Link>
           </li>
           <li>
-            <a
-              href='./'
-              onClick={(event) => handleGameMenuClick(event, 'Logout')}
-            >
-              Logout
-            </a>
+            <Link to={'/'}>Logout</Link>
           </li>
         </ul>
       </div>
@@ -74,13 +50,13 @@ const Dashboard = () => {
         <h2>Settings</h2>
         <ul>
           <li>
-            <a href='./'>Sound</a>
+            <Link to={'/dashboard'}>Sound</Link>
           </li>
           <li>
-            <a href='./'>Graphics</a>
+            <Link to={'/dashboard'}>Graphics</Link>
           </li>
           <li>
-            <a href='./'>Controls</a>
+            <Link to={'/dashboard'}>Controls</Link>
           </li>
         </ul>
       </div>

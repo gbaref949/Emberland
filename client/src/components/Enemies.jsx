@@ -5,21 +5,21 @@ const Enemies = () => {
         const Phaser = require('phaser');
 
         const config = {
-        type: Phaser.AUTO,
-        width: 800,
-        height: 600,
-        scene: {
-            preload: preload,
-            create: create,
-            update: update,
-        },
-        physics: {
-            default: 'arcade',
-            arcade: {
-            gravity: { y: 0 },
-            debug: false,
+            type: Phaser.AUTO,
+            width: 800,
+            height: 600,
+            scene: {
+                preload: preload,
+                create: create,
+                update: update,
             },
-        },
+            physics: {
+                default: 'arcade',
+                arcade: {
+                gravity: { y: 0 },
+                debug: false,
+                },
+            },
         };
 
         const game = new Phaser.Game(config);
@@ -37,18 +37,19 @@ const Enemies = () => {
             player = this.physics.add.sprite(400, 300, 'player');
             player.setCollideWorldBounds(true);
 
+            
+            block1 = this.physics.add.sprite(200, 300, 'block');
+            
             enemy = this.physics.add.sprite(600, 600, 'enemy');
             enemy.setCollideWorldBounds(true);
-
-            block1 = this.physics.add.sprite(200, 300, 'block');
-
+            
             // Set block1 to be immovable (it won't be affected by collisions)
             block1.setImmovable(true);
             block1.setScale(3);
             this.physics.add.collider(player, enemy, handlePlayerCollision);
 
             // Add a collider to handle collisions between blocks
-            this.physics.add.collider(block1, player);
+            this.physics.add.collider(block1, player, handleFallCollision);
             this.physics.add.collider(enemy, player);
 
             // Set collide world bounds for both blocks
@@ -70,6 +71,11 @@ const Enemies = () => {
                 handleMovement();
             }
             trackPlayerWithCollision(enemy, player);
+        }
+
+        function handleFallCollision(){
+            player.x = 100;
+            player.y = 100;
         }
 
         function handlePlayerCollision() {
