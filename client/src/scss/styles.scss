@@ -5,8 +5,9 @@
 // "savePath": "/client/src/css"
 
 *{
-    background-color: #001528;
-    color: rgb(216, 216, 216);
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body{
@@ -16,6 +17,7 @@ body{
     background-color: #001528;
     background: linear-gradient(180deg, #025962 0%, rgba(0, 21, 40, 0.00) 100%);
     min-height: 100vh;
+    color: rgb(216, 216, 216);
 }
 
 .homeLogo{
@@ -58,5 +60,6 @@ body{
     position: fixed;
     top: 50%;
     left: 50%;
+    color: rgb(216, 216, 216);
     transform: translate(-50%, -50%);
 }

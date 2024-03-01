@@ -99,8 +99,9 @@ table {
 .dashboard {
   display: flex;
   justify-content: space-between;
+  width: 75vw;
   padding: 20px;
-  color: white;
+  color: rgb(32, 32, 32);
 }
 
 .player-profile,
@@ -117,6 +118,8 @@ table {
 .game-menu h2,
 .settings-menu h2 {
   margin-top: 0;
+  font-size: 32px;
+  margin-bottom: 1.5rem;
 }
 
 ul {
@@ -130,6 +133,7 @@ ul li {
 
 a {
   text-decoration: none;
+  color: rgb(32, 32, 32);
 }
 
 a:hover {
@@ -138,8 +142,9 @@ a:hover {
 }
 
 * {
-  background-color: #001528;
-  color: rgb(216, 216, 216);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -149,6 +154,7 @@ body {
   background-color: #001528;
   background: linear-gradient(180deg, #025962 0%, rgba(0, 21, 40, 0) 100%);
   min-height: 100vh;
+  color: rgb(216, 216, 216);
 }
 
 .homeLogo {
@@ -191,5 +197,6 @@ body {
   position: fixed;
   top: 50%;
   left: 50%;
+  color: rgb(216, 216, 216);
   transform: translate(-50%, -50%);
 }/*# sourceMappingURL=styles.css.map */

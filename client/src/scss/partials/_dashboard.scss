@@ -5,8 +5,9 @@ $box-margin: 20px;
 .dashboard {
     display: flex;
     justify-content: space-between;
+    width: 75vw;
     padding: $box-padding;
-    color: white;
+    color: rgb(32, 32, 32);
 }
 
 .player-profile,
@@ -16,13 +17,15 @@ $box-margin: 20px;
     background-color: #f0f0f0;
     padding: $box-padding;
     border-radius: $box-border-radius;
-    margin: 0 $box-margin; // Apply margin to all boxes
+    margin: 0 $box-margin;
 }
 
 .player-profile h2,
 .game-menu h2,
 .settings-menu h2 {
     margin-top: 0;
+    font-size: 32px;
+    margin-bottom: 1.5rem;
 }
 
 ul {
@@ -36,6 +39,7 @@ ul li {
 
 a {
     text-decoration: none;
+    color: rgb(32, 32, 32);
 }
 
 a:hover {
