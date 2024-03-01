@@ -1,7 +1,12 @@
+$box-padding: 20px;
+$box-border-radius: 5px;
+$box-margin: 20px;
+
 .dashboard {
     display: flex;
-    justify-content: space-between; // Adjust spacing between boxes
+    justify-content: space-between;
     padding: $box-padding;
+    color: white;
 }
 
 .player-profile,
@@ -31,9 +36,9 @@ ul li {
 
 a {
     text-decoration: none;
-    color: #333;
 }
 
 a:hover {
     color: #666;
+    text-decoration: underline;
 }
