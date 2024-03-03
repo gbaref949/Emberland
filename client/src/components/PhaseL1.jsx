@@ -146,7 +146,7 @@ const Phase = () => {
         });
 
         attackCooldownTimer = player.scene.time.addEvent({
-          delay: 250, // 0.25 seconds cooldown
+          delay: 500, // 0.5 seconds cooldown
           callback: () => {
             attackCooldown = true;
             attackCooldownTimer.destroy();
