@@ -1,3 +1,31 @@
-.gameOverImg{
-    width: 5rem;
+.gameOverCont{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 90vh;
+    
+    .gameOverTitle {
+        font-size: 5rem;
+    }
+
+    .gameOverImg {
+        width: 40rem;
+    }
+
+    .gameOverBtnCont{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+
+        .gameOverBtn{
+            font-size: 2rem;
+            background-color: #f0f0f0;
+            color: rgb(32, 32, 32);
+            padding: 1rem;
+            margin: 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+    }
 }

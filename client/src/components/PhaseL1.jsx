@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 const Phase = () => {
-  const direction = useRef('east'); // Using useRef instead of useState
+  const direction = useRef('W'); // Using useRef instead of useState
   useEffect(() => {
     const Phaser = require('phaser');
 
