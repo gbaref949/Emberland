@@ -40,10 +40,14 @@ const Phase = () => {
       player.setScale();
       player.setCollideWorldBounds(true);
 
+      // attackSprite = player.scene.add.rectangle(player.x + 10 * Math.cos(player.rotation), player.y + 10 * Math.sin(player.rotation), 20, 20, 0xFF0000);
+      // attackSprite.setOrigin(1, 1);
+
       enemy = this.physics.add.sprite(600, 600, 'enemy');
       enemy.setCollideWorldBounds(true);
+      player.scene.physics.world.enable(enemy, Phaser.Physics.Arcade.Sprite);
+
       this.physics.add.collider(player, enemy, handlePlayerCollision);
-      // this.physics.add.collider(player, enemy, destroyEnemy);
 
       this.input.on('pointerdown', handleAttack);
       // this.input.keyboard.on('keydown-W', handleNorth);
@@ -166,10 +170,6 @@ const Phase = () => {
     // console.log('Enemy Velocity X:', enemy.body.velocity.x, 'Enemy Velocity Y:', enemy.body.velocity.y);
   }
 
-  function destroyEnemy(enemy){
-    enemy.destroy();
-  }
-
   function trackPlayerWithCollision(enemy, player) {
     const speed = 50; // Adjust the speed as needed
 
@@ -193,6 +193,11 @@ const Phase = () => {
     // enemy.scene.physics.add.collider(block1, enemy, handleCollision);
   }
 
+  function destroyEnemy() {
+    enemy.disableBody(true, true);
+  }
+
+
   function handleAttack() {
     if (attackCooldown) {
       attackCooldown = false;
@@ -203,26 +208,51 @@ const Phase = () => {
       if (direction.current === 'W') {
         const attackX = player.x + attackDistance * Math.cos(attackAngle);
         const attackY = player.y + attackDistance * Math.sin(attackAngle);
-        attackSprite = player.scene.add.rectangle(attackX, attackY, 20, 50, 0xFF0000);
+        // attackSprite = player.scene.add.rectangle(attackX, attackY, 20, 50, 0xFF0000);
+        // attackSprite.setOrigin(1, 1);
+        attackSprite = player.scene.physics.add.sprite(attackX, attackY, 'attackTexture');
+        attackSprite.displayWidth = 20;
+        attackSprite.displayHeight = 50;
         attackSprite.setOrigin(1, 1);
       } else if (direction.current === 'D') {
         const attackX = player.x + attackDistance * Math.cos(attackAngle);
         const attackY = player.y + attackDistance * Math.sin(attackAngle);
-        attackSprite = player.scene.add.rectangle(attackX, attackY, 50, 20, 0xFF0000);
+        // attackSprite = player.scene.add.rectangle(attackX, attackY, 50, 20, 0xFF0000);
+        // attackSprite.setOrigin(0, 0.5);
+        attackSprite = player.scene.physics.add.sprite(attackX, attackY, 'attackTexture');
+        attackSprite.displayWidth = 50;
+        attackSprite.displayHeight = 20;
         attackSprite.setOrigin(0, 0.5);
       } else if (direction.current === 'S') {
         const attackX = player.x - attackDistance * Math.cos(attackAngle); // Subtracting for downward movement
         const attackY = player.y - attackDistance * Math.sin(attackAngle); // Subtracting for downward movement
-        attackSprite = player.scene.add.rectangle(attackX, attackY, 20, 50, 0xFF0000);
-        attackSprite.setOrigin(0, 0); // Origin changed for downward movement
+        // attackSprite = player.scene.add.rectangle(attackX, attackY, 20, 50, 0xFF0000);
+        // attackSprite.setOrigin(0, 0); // Origin changed for downward movement
+        attackSprite = player.scene.physics.add.sprite(attackX, attackY, 'attackTexture');
+        attackSprite.displayWidth = 20;
+        attackSprite.displayHeight = 50;
+        attackSprite.setOrigin(0, 0);
       } else if (direction.current === 'A') {
         const attackX = player.x - attackDistance * Math.cos(attackAngle); // Subtracting for leftward movement
         const attackY = player.y - attackDistance * Math.sin(attackAngle); // Subtracting for leftward movement
-        attackSprite = player.scene.add.rectangle(attackX, attackY, 50, 20, 0xFF0000);
-        attackSprite.setOrigin(1, 0.5); // Origin changed for leftward movement
+        // attackSprite = player.scene.add.rectangle(attackX, attackY, 50, 20, 0xFF0000);
+        // attackSprite.setOrigin(1, 0.5); // Origin changed for leftward movement
+        attackSprite = player.scene.physics.add.sprite(attackX, attackY, 'attackTexture');
+        attackSprite.displayWidth = 50;
+        attackSprite.displayHeight = 20;
+        attackSprite.setOrigin(1, 0.5);
       }
 
-      player.scene.time.delayedCall(300, () => {
+      // Enable physics on attackSprite
+      player.scene.physics.world.enable(attackSprite);
+
+      // Add attackSprite to the physics world
+      player.scene.physics.world.add(attackSprite);
+      player.scene.physics.world.enable(attackSprite, Phaser.Physics.Arcade.Sprite);
+      player.scene.physics.add.overlap(attackSprite, enemy, destroyEnemy);
+
+
+      player.scene.time.delayedCall(150, () => {
         attackSprite.destroy();
       });
 
