@@ -25,11 +25,12 @@ const Phase = () => {
 
     const game = new Phaser.Game(config);
     let cursors, keys, dashTimer;
-    let player, block1, enemy, attackSprite;
+    let player, block1, attackSprite;
     let dashAvailable = true;
     let inDash = false;
     let attackCooldown = true;
     let attackCooldownTimer;
+    const newEnemies = [];
 
     function preload() {
       this.load.image('player', '../pages/images/editedLogo.png');
@@ -43,11 +44,13 @@ const Phase = () => {
       // attackSprite = player.scene.add.rectangle(player.x + 10 * Math.cos(player.rotation), player.y + 10 * Math.sin(player.rotation), 20, 20, 0xFF0000);
       // attackSprite.setOrigin(1, 1);
 
-      enemy = this.physics.add.sprite(600, 600, 'enemy');
-      enemy.setCollideWorldBounds(true);
-      player.scene.physics.world.enable(enemy, Phaser.Physics.Arcade.Sprite);
+      generateEnemies(this, player);
 
-      this.physics.add.collider(player, enemy, handlePlayerCollision);
+      // enemy = this.physics.add.sprite(600, 600, 'enemy');
+      // enemy.setCollideWorldBounds(true);
+      // player.scene.physics.world.enable(enemy, Phaser.Physics.Arcade.Sprite);
+
+      // this.physics.add.collider(player, enemy, handlePlayerCollision);
 
       this.input.on('pointerdown', handleAttack);
       // this.input.keyboard.on('keydown-W', handleNorth);
@@ -69,8 +72,53 @@ const Phase = () => {
       if(!inDash) {
         handleMovement();
       }
-      trackPlayerWithCollision(enemy, player);
+      // trackPlayerWithCollision(enemy, player);
     }
+
+    function generateEnemies(scene) {
+          
+      // Generate enemies
+      let counter = 0;
+
+      // Generate enemies at regular intervals
+      const intervalId = setInterval(() => {
+        let x = Phaser.Math.Between(0, 770);
+        let y = Phaser.Math.Between(0, 770);
+
+        // Check for minimum distance from the player
+        while (Phaser.Math.Distance.Between(player.x, player.y, x, y) < 100) {
+          x = Phaser.Math.Between(0, 770);
+          y = Phaser.Math.Between(0, 770);
+        }
+
+        const enemy = scene.physics.add.sprite(x, y, 'enemy');
+        enemy.setCollideWorldBounds(true);
+        scene.physics.world.enable(enemy, Phaser.Physics.Arcade.Sprite);
+        scene.physics.add.collider(player, enemy, handlePlayerCollision);
+
+        // Add the enemy to the tracking array
+        newEnemies.push(enemy);
+
+        // Increment counter
+        counter++;
+
+        // Stop generating after a certain number of enemies (adjust as needed)
+        if (counter >= 5) {
+          clearInterval(intervalId);
+        }
+      }, 2000);
+
+      // Update function to be called in the scene's update loop
+      function update() {
+        newEnemies.forEach((enemy) => {
+          trackPlayerWithCollision(enemy, player)
+        });
+      }
+
+      // Update function is added to the scene's update method
+      scene.events.on('update', update);
+    }
+
 
     function handleMovement() {
       const speed = 150;
@@ -143,32 +191,45 @@ const Phase = () => {
     });
   }
 
-  function handlePlayerCollision() {
-    const pushForce = 1000; // Adjust the force as needed
+  function handlePlayerCollision(player, enemy) {
+    // console.log('Collision occurred between player and enemy');
+
+    const pushForce = 1000;
+
+    console.log('enemy: ' + enemy.x)
+    console.log('enemy: ' + enemy.y)
+    console.log('player: ' + player.x)
+    console.log('player: ' + player.y)
 
     // Calculate the direction from the enemy to the player
     const directionX = player.x - enemy.x;
     const directionY = player.y - enemy.y;
 
-    // console.log('Direction X:', directionX, 'Direction Y:', directionY);
+    console.log('Direction X:', directionX, 'Direction Y:', directionY);
 
-    // Normalize the direction vector
+    // Check if the length is not zero before normalization
     const length = Math.sqrt(directionX ** 2 + directionY ** 2);
-    const normalizedDirectionX = directionX / length;
-    const normalizedDirectionY = directionY / length;
+    if (length !== 0) {
+      // Normalize the direction vector
+      const normalizedDirectionX = directionX / length;
+      const normalizedDirectionY = directionY / length;
 
-    // console.log('Normalized X:', normalizedDirectionX, 'Normalized Y:', normalizedDirectionY);
+      console.log('Normalized X:', normalizedDirectionX, 'Normalized Y:', normalizedDirectionY);
 
-    // Apply force to the player in the opposite direction
-    player.setVelocityX(pushForce * normalizedDirectionX);
-    player.setVelocityY(pushForce * normalizedDirectionY);
+      // Apply force to the player in the opposite direction
+      player.setVelocityX(pushForce * normalizedDirectionX);
+      player.setVelocityY(pushForce * normalizedDirectionY);
 
-    // Apply force to the enemy in the opposite direction
-    enemy.setVelocity(0,0)
+      // Apply force to the enemy in the opposite direction
+      enemy.setVelocity(0, 0);
 
-    // console.log('Player Velocity X:', player.body.velocity.x, 'Player Velocity Y:', player.body.velocity.y);
-    // console.log('Enemy Velocity X:', enemy.body.velocity.x, 'Enemy Velocity Y:', enemy.body.velocity.y);
+      console.log('Player Velocity X:', player.body.velocity.x, 'Player Velocity Y:', player.body.velocity.y);
+      console.log('Enemy Velocity X:', enemy.body.velocity.x, 'Enemy Velocity Y:', enemy.body.velocity.y);
+    } else {
+      console.log('Direction vector length is zero. Skipping normalization.');
+    }
   }
+
 
   function trackPlayerWithCollision(enemy, player) {
     const speed = 50; // Adjust the speed as needed
@@ -192,11 +253,6 @@ const Phase = () => {
     // Add a collider to handle collisions
     // enemy.scene.physics.add.collider(block1, enemy, handleCollision);
   }
-
-  function destroyEnemy() {
-    enemy.disableBody(true, true);
-  }
-
 
   function handleAttack() {
     if (attackCooldown) {
@@ -249,7 +305,11 @@ const Phase = () => {
       // Add attackSprite to the physics world
       player.scene.physics.world.add(attackSprite);
       player.scene.physics.world.enable(attackSprite, Phaser.Physics.Arcade.Sprite);
-      player.scene.physics.add.overlap(attackSprite, enemy, destroyEnemy);
+      newEnemies.forEach((enemy) => {
+        player.scene.physics.add.overlap(attackSprite, enemy, ()=>{
+          enemy.disableBody(true, true);
+        });
+      });
 
 
       player.scene.time.delayedCall(150, () => {
