@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-const Enemies = () => {
+const Dash = ({player}) => {
     useEffect(() => {
         const Phaser = require('phaser');
 
@@ -142,4 +142,4 @@ const Enemies = () => {
     return <div id="game-container"></div>;
 };
 
-export default Enemies;
+export default Dash;

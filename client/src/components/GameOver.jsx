@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import gameOver from '../pages/images/brokenHeart.png';
 
+
 const GameOver = () => {
   const navigate = useNavigate();
 

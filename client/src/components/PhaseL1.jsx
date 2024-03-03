@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import Dash from './Dash';
 
 const Phase = () => {
   const direction = useRef('W'); // Using useRef instead of useState
@@ -162,7 +163,12 @@ const Phase = () => {
     };
   }, []);
 
-  return <div id="game-container"></div>;
+  return (
+    <>
+      <div id="game-container"></div>
+      <Dash></Dash>
+    </>
+  );
 };
 
 export default Phase;
