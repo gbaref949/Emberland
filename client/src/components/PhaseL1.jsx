@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import Dash from './Dash';
 
 const Phase = () => {
   const direction = useRef('W'); // Using useRef instead of useState
@@ -25,11 +24,10 @@ const Phase = () => {
     };
 
     const game = new Phaser.Game(config);
-    let cursors;
-    let keys;
-    let player, attackSprite;
+    let cursors, keys, dashTimer;
+    let player, block1, enemy, attackSprite;
     let dashAvailable = true;
-    let dashTimer;
+    let inDash = false;
     let attackCooldown = true;
     let attackCooldownTimer;
 
@@ -41,6 +39,11 @@ const Phase = () => {
       player = this.physics.add.sprite(385, 385, 'player');
       player.setScale();
       player.setCollideWorldBounds(true);
+
+      enemy = this.physics.add.sprite(600, 600, 'enemy');
+      enemy.setCollideWorldBounds(true);
+      this.physics.add.collider(player, enemy, handlePlayerCollision);
+      // this.physics.add.collider(player, enemy, destroyEnemy);
 
       this.input.on('pointerdown', handleAttack);
       // this.input.keyboard.on('keydown-W', handleNorth);
@@ -59,104 +62,181 @@ const Phase = () => {
     }
 
     function update() {
-      handleMovement();
+      if(!inDash) {
+        handleMovement();
+      }
+      trackPlayerWithCollision(enemy, player);
     }
 
     function handleMovement() {
       const speed = 150;
+      const friction = 0.8; // Adjust the friction factor as needed
 
       if (cursors.left.isDown || keys.A.isDown) {
-        player.setVelocityX(-speed);
-        direction.current = 'A';
+          player.setVelocityX(-speed);
+          direction.current = 'A';
       } else if (cursors.right.isDown || keys.D.isDown) {
-        player.setVelocityX(speed);
-        direction.current = 'D';
+          player.setVelocityX(speed);
+          direction.current = 'D';
       } else {
-        player.setVelocityX(0);
+          // Apply friction to gradually slow down the player if no movement input
+          player.setVelocityX(player.body.velocity.x * friction);
       }
 
       if (cursors.up.isDown || keys.W.isDown) {
-        player.setVelocityY(-speed);
-        direction.current = 'W';
+          player.setVelocityY(-speed);
+          direction.current = 'W';
       } else if (cursors.down.isDown || keys.S.isDown) {
-        player.setVelocityY(speed);
-        direction.current = 'S';
+          player.setVelocityY(speed);
+          direction.current = 'S';
       } else {
-        player.setVelocityY(0);
+          // Apply friction to gradually slow down the player if no movement input
+          player.setVelocityY(player.body.velocity.y * friction);
       }
 
+      // Check for dash input
       if (keys.SHIFT.isDown && dashAvailable) {
-        dashAvailable = false;
-        dash();
+          dashAvailable = false;
+          inDash = true;
+          dash();
       }
+  }
+
+  function dash() {
+    let dashX = 0;
+    let dashY = 0;
+
+    if (cursors.left.isDown || keys.A.isDown) {
+        dashX = -500;
+    } else if (cursors.right.isDown || keys.D.isDown) {
+        dashX = 500;
     }
 
-    function dash() {
-      const dashDistance = 50;
+    if (cursors.up.isDown || keys.W.isDown) {
+        dashY = -500;
+    } else if (cursors.down.isDown || keys.S.isDown) {
+        dashY = 500;
+    }
 
-      player.x += (cursors.left.isDown || keys.A.isDown) ? -dashDistance :
-                  (cursors.right.isDown || keys.D.isDown) ? dashDistance : 0;
-      player.y += (cursors.up.isDown || keys.W.isDown) ? -dashDistance :
-                  (cursors.down.isDown || keys.S.isDown) ? dashDistance : 0;
+    // Set the new velocity
+    player.setVelocity(dashX, dashY);
 
-      dashTimer = player.scene.time.addEvent({
-        delay: 300,
+    // Runs the code after a short time
+    dashTimer = player.scene.time.addEvent({
+        delay: 100, // Adjust the delay as needed
         callback: () => {
-          dashTimer.destroy();
-          player.scene.time.delayedCall(2700, () => {
+        dashTimer.destroy();
+        // allows the player to move again
+        setTimeout(()=>{
+            inDash = false
+        }, 100);
+        setTimeout(()=>{
             dashAvailable = true;
-          });
+        }, 2900);
+        },
+        callbackScope: this,
+        loop: false,
+    });
+  }
+
+  function handlePlayerCollision() {
+    const pushForce = 1000; // Adjust the force as needed
+
+    // Calculate the direction from the enemy to the player
+    const directionX = player.x - enemy.x;
+    const directionY = player.y - enemy.y;
+
+    // console.log('Direction X:', directionX, 'Direction Y:', directionY);
+
+    // Normalize the direction vector
+    const length = Math.sqrt(directionX ** 2 + directionY ** 2);
+    const normalizedDirectionX = directionX / length;
+    const normalizedDirectionY = directionY / length;
+
+    // console.log('Normalized X:', normalizedDirectionX, 'Normalized Y:', normalizedDirectionY);
+
+    // Apply force to the player in the opposite direction
+    player.setVelocityX(pushForce * normalizedDirectionX);
+    player.setVelocityY(pushForce * normalizedDirectionY);
+
+    // Apply force to the enemy in the opposite direction
+    enemy.setVelocity(0,0)
+
+    // console.log('Player Velocity X:', player.body.velocity.x, 'Player Velocity Y:', player.body.velocity.y);
+    // console.log('Enemy Velocity X:', enemy.body.velocity.x, 'Enemy Velocity Y:', enemy.body.velocity.y);
+  }
+
+  function destroyEnemy(enemy){
+    enemy.destroy();
+  }
+
+  function trackPlayerWithCollision(enemy, player) {
+    const speed = 50; // Adjust the speed as needed
+
+    // Create Phaser.Vector2 instances for enemy and player positions
+    const enemyPosition = new Phaser.Math.Vector2(enemy.x, enemy.y);
+    const playerPosition = new Phaser.Math.Vector2(player.x, player.y);
+
+    // Update function to be called in the scene's update loop
+    function update() {
+        // Calculate the direction vector from enemy to player
+        const direction = playerPosition.clone().subtract(enemyPosition).normalize();
+
+        // Set the velocity based on the normalized direction
+        enemy.setVelocity(direction.x * speed, direction.y * speed);
+    }
+
+    // Update function is added to the scene's update method
+    enemy.scene.events.on('update', update, this);
+
+    // Add a collider to handle collisions
+    // enemy.scene.physics.add.collider(block1, enemy, handleCollision);
+  }
+
+  function handleAttack() {
+    if (attackCooldown) {
+      attackCooldown = false;
+      const attackDistance = 10;
+      const attackAngle = player.rotation;
+      console.log(direction.current)
+
+      if (direction.current === 'W') {
+        const attackX = player.x + attackDistance * Math.cos(attackAngle);
+        const attackY = player.y + attackDistance * Math.sin(attackAngle);
+        attackSprite = player.scene.add.rectangle(attackX, attackY, 20, 50, 0xFF0000);
+        attackSprite.setOrigin(1, 1);
+      } else if (direction.current === 'D') {
+        const attackX = player.x + attackDistance * Math.cos(attackAngle);
+        const attackY = player.y + attackDistance * Math.sin(attackAngle);
+        attackSprite = player.scene.add.rectangle(attackX, attackY, 50, 20, 0xFF0000);
+        attackSprite.setOrigin(0, 0.5);
+      } else if (direction.current === 'S') {
+        const attackX = player.x - attackDistance * Math.cos(attackAngle); // Subtracting for downward movement
+        const attackY = player.y - attackDistance * Math.sin(attackAngle); // Subtracting for downward movement
+        attackSprite = player.scene.add.rectangle(attackX, attackY, 20, 50, 0xFF0000);
+        attackSprite.setOrigin(0, 0); // Origin changed for downward movement
+      } else if (direction.current === 'A') {
+        const attackX = player.x - attackDistance * Math.cos(attackAngle); // Subtracting for leftward movement
+        const attackY = player.y - attackDistance * Math.sin(attackAngle); // Subtracting for leftward movement
+        attackSprite = player.scene.add.rectangle(attackX, attackY, 50, 20, 0xFF0000);
+        attackSprite.setOrigin(1, 0.5); // Origin changed for leftward movement
+      }
+
+      player.scene.time.delayedCall(300, () => {
+        attackSprite.destroy();
+      });
+
+      attackCooldownTimer = player.scene.time.addEvent({
+        delay: 500, // 0.5 seconds cooldown
+        callback: () => {
+          attackCooldown = true;
+          attackCooldownTimer.destroy();
         },
         callbackScope: this,
         loop: false,
       });
     }
-
-    function handleAttack() {
-      if (attackCooldown) {
-        attackCooldown = false;
-        const attackDistance = 10;
-        const attackAngle = player.rotation;
-        console.log(direction.current)
-
-        if (direction.current === 'W') {
-          const attackX = player.x + attackDistance * Math.cos(attackAngle);
-          const attackY = player.y + attackDistance * Math.sin(attackAngle);
-          attackSprite = player.scene.add.rectangle(attackX, attackY, 20, 50, 0xFF0000);
-          attackSprite.setOrigin(1, 1);
-        } else if (direction.current === 'D') {
-          const attackX = player.x + attackDistance * Math.cos(attackAngle);
-          const attackY = player.y + attackDistance * Math.sin(attackAngle);
-          attackSprite = player.scene.add.rectangle(attackX, attackY, 50, 20, 0xFF0000);
-          attackSprite.setOrigin(0, 0.5);
-        } else if (direction.current === 'S') {
-          const attackX = player.x - attackDistance * Math.cos(attackAngle); // Subtracting for downward movement
-          const attackY = player.y - attackDistance * Math.sin(attackAngle); // Subtracting for downward movement
-          attackSprite = player.scene.add.rectangle(attackX, attackY, 20, 50, 0xFF0000);
-          attackSprite.setOrigin(0, 0); // Origin changed for downward movement
-        } else if (direction.current === 'A') {
-          const attackX = player.x - attackDistance * Math.cos(attackAngle); // Subtracting for leftward movement
-          const attackY = player.y - attackDistance * Math.sin(attackAngle); // Subtracting for leftward movement
-          attackSprite = player.scene.add.rectangle(attackX, attackY, 50, 20, 0xFF0000);
-          attackSprite.setOrigin(1, 0.5); // Origin changed for leftward movement
-        }
-        
-
-        player.scene.time.delayedCall(300, () => {
-          attackSprite.destroy();
-        });
-
-        attackCooldownTimer = player.scene.time.addEvent({
-          delay: 500, // 0.5 seconds cooldown
-          callback: () => {
-            attackCooldown = true;
-            attackCooldownTimer.destroy();
-          },
-          callbackScope: this,
-          loop: false,
-        });
-      }
-    }
+  }
 
     return () => {
       game.destroy(true);
@@ -166,7 +246,6 @@ const Phase = () => {
   return (
     <>
       <div id="game-container"></div>
-      <Dash></Dash>
     </>
   );
 };
