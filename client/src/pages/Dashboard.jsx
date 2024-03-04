@@ -1,14 +1,28 @@
-import React from 'react';
+import {useEffect} from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Logo from './images/editedLogo.png';
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  let signedIn = sessionStorage.getItem('authenticated') || false;
+
+  useEffect(()=>{
+    if(signedIn == 'false'){
+      console.log('navigating')
+      navigate('/login');
+    }
+  })
+
   // Function to handle clicks on game menu items
   function handleGameMenuClick(event, menuItem) {
     event.preventDefault();
 
     navigate(`${menuItem}`);
+  }
+
+  function logout(){
+    sessionStorage.setItem('authenticated', false);
+    navigate('/login');
   }
 
   return (
@@ -47,7 +61,7 @@ const Dashboard = () => {
                 <Link to={'/dashboard'}>Leaderboard</Link>
               </li>
               <li>
-                <Link to={'/'}>Logout</Link>
+                <Link onClick={logout}>Logout</Link>
               </li>
             </ul>
           </div>

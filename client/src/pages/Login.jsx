@@ -1,11 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
+    const navigate = useNavigate();
+    let signedIn = sessionStorage.getItem('authenticated') || false;
+    if(signedIn == 'true'){
+        navigate('/dashboard');
+    }
+
+    const taken = useRef(false);
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
+
+    const [people, setPeople] = useState([]);
+
+    // gets all the users
+    useEffect(()=>{  
+        fetch('http://localhost:5000/').then(response =>{
+            return response.json();
+        }).then(res=>{
+            setPeople(res);
+        });
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -18,7 +36,12 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // You can perform login logic here
-        console.log(formData); // For demo purpose
+        people.map(person=>{
+            if(formData.email === person.email || formData.password === person.password){
+                sessionStorage.setItem('authenticated', true);
+                navigate('/dashboard');
+            }
+        })
     };
 
     return (
@@ -51,7 +74,7 @@ const Login = () => {
                 </div>
                 <button type="submit" className="submit-button">Login</button>
                 <div className='registerLink'>
-                    <Link to={'/'}>Don't have an account? Register</Link>
+                    <p>Don't have an account? <Link to={'/'}>Register</Link></p>
                 </div>
             </form>
         </div>

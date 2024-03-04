@@ -58,9 +58,9 @@ app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 
-app.get("/", (req, res) => {
-	res.send("server is working");
-});
+// app.get("/", (req, res) => {
+// 	res.send("server is working");
+// });
 app.use('/', require('./routes/people-controller'));
 
 const initServer = async () => {

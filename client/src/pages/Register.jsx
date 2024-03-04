@@ -1,12 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 const Register = () => {
+    const navigate = useNavigate();
+    let signedIn = sessionStorage.getItem('authenticated') || false;
+    if(signedIn == 'true'){
+        navigate('/dashboard');
+    }
+
+    const taken = useRef(false);
     const [formData, setFormData] = useState({
         username: '',
         email: '',
         password: ''
     });
+
+    const [people, setPeople] = useState([]);
+
+    // gets all the users
+    useEffect(()=>{  
+        fetch('http://localhost:5000/').then(response =>{
+            return response.json();
+        }).then(res=>{
+            setPeople(res);
+        });
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -20,7 +38,26 @@ const Register = () => {
         e.preventDefault();
         // You can perform validation here before submitting the form
         // For simplicity, I'm just logging the form data
-        console.log(formData);
+        people.map(person=>{
+            if(formData.email === person.email){
+                taken.current = true;
+            }
+        })
+
+        // if email is not already taken, create a new user
+        if(taken.current == true){
+            alert('Email is already taken')
+        }else{
+            let username = formData.username;
+            let email = formData.email;
+            let password = formData.password;
+            fetch('http://localhost:5000/',{
+                method: 'POST',
+                body: JSON.stringify({username, email, password}),
+                headers: {'Content-Type': 'application/json'},
+            })
+            navigate('/login');
+        }
     };
 
     return (
@@ -65,7 +102,7 @@ const Register = () => {
                 </div>
                 <button type="submit" className="submit-button">Register</button>
                 <div className='loginLink'>
-                    <Link to={'/Login'}>Already have an account? Login</Link>
+                    <p>Already have an account? <Link to={'/Login'}>Login</Link></p>
                 </div>
             </form>
         </div>
