@@ -222,7 +222,7 @@ table {
   font-size: 5rem;
 }
 .gameOverCont .gameOverImg {
-  width: 40rem;
+  height: 60vh;
 }
 .gameOverCont .gameOverBtnCont {
   display: flex;
