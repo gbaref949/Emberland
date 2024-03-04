@@ -81,7 +81,7 @@ const Phase = () => {
       for(let i=0;i<16;i++){
         temp = this.add.rectangle(blockValues[i][0], blockValues[i][1], blockValues[i][2], blockValues[i][3], 0x0000ff);
         this.physics.add.existing(temp, true);
-        this.physics.add.collider(player, temp, handleFallCollision);
+        this.physics.add.collider(player, temp);
         temp.setDepth(0);
         blocks.push(temp);
       }
