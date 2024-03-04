@@ -243,13 +243,18 @@ table {
 .login-container {
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
   height: 100vh;
-  background-color: #1e1e1e;
   color: #fff;
 }
+.login-container h2 {
+  font-size: 5rem;
+  position: absolute;
+  top: 2.25rem;
+}
 .login-container form {
-  max-width: 400px;
+  width: 800px;
   padding: 40px;
   border-radius: 8px;
   background-color: #333;
@@ -261,6 +266,7 @@ table {
 .login-container form .form-group label {
   display: block;
   margin-bottom: 5px;
+  font-size: 1.6rem;
 }
 .login-container form .form-group input {
   width: 100%;
@@ -287,6 +293,10 @@ table {
 }
 .login-container form .submit-button:hover {
   background-color: #0056b3;
+}
+.login-container form .registerLink {
+  text-align: center;
+  margin-top: 2rem;
 }
 
 .register-container {
