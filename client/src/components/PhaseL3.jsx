@@ -7,6 +7,7 @@ const Phase = () => {
   const healthRef = useRef(100);
   const scoreRef = useRef(0);
   const navigate = useNavigate();
+  const bossHitCounter = useRef(0);
 
   useEffect(() => {
     const Phaser = require('phaser');
@@ -31,7 +32,7 @@ const Phase = () => {
 
     const game = new Phaser.Game(config);
     let cursors, keys, dashTimer, healthText, regen, intervalId, scoreText;
-    let player, block1, attackSprite;
+    let player, block1, attackSprite, bossEnemy;
     let dashAvailable = true;
     let inDash = false;
     let attackCooldown = true;
@@ -71,6 +72,15 @@ const Phase = () => {
 
       // attackSprite = player.scene.add.rectangle(player.x + 10 * Math.cos(player.rotation), player.y + 10 * Math.sin(player.rotation), 20, 20, 0xFF0000);
       // attackSprite.setOrigin(1, 1);
+
+      // Create boss enemy
+      bossEnemy = this.physics.add.sprite(100, 100, 'bossEnemy'); // Spawn boss enemy in top left corner
+      bossEnemy.setScale(2); // Make boss enemy twice as big as player
+      bossEnemy.setCollideWorldBounds(true);
+      bossEnemy.setDepth(1);
+      this.physics.add.collider(bossEnemy, player, handlePlayerCollisionBoss);
+
+
 
       let temp;
       for(let i=0;i<16;i++){
@@ -117,7 +127,7 @@ const Phase = () => {
     }
 
     function update() {
-      if(!inDash) {
+      if (!inDash) {
         handleMovement();
       }
       if (healthRef.current <= 0) {
@@ -125,15 +135,17 @@ const Phase = () => {
         game.destroy(true);
         clearInterval(regen);
         clearInterval(intervalId);
-        fetch(`http://localhost:5000/${currentUser.userID}`,{
+        fetch(`http://localhost:5000/${currentUser.userID}`, {
           method: 'PUT',
-          body: JSON.stringify({score}),
-          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ score }),
+          headers: { 'Content-Type': 'application/json' },
         })
         navigate('/gameOver');
       }
-      // trackPlayerWithCollision(enemy, player);
+      // Track player with collision for boss enemy
+      trackPlayerWithCollision(bossEnemy, player);
     }
+    
 
     function handleFallCollision(player, block) {
       console.log('overlap')
@@ -301,6 +313,29 @@ const Phase = () => {
       scene.events.on('update', update);
     }
 
+    function trackPlayerWithCollision(enemy, player) {
+      const speed = 50; // Adjust the speed as needed
+    
+      // Create Phaser.Vector2 instances for enemy and player positions
+      const enemyPosition = new Phaser.Math.Vector2(enemy.x, enemy.y);
+      const playerPosition = new Phaser.Math.Vector2(player.x, player.y);
+    
+      // Update function to be called in the scene's update loop
+      function update() {
+        // Calculate the direction vector from enemy to player
+        const direction = playerPosition.clone().subtract(enemyPosition).normalize();
+    
+        // Set the velocity based on the normalized direction
+        enemy.setVelocity(direction.x * speed, direction.y * speed);
+      }
+    
+      // Update function is added to the scene's update method
+      enemy.scene.events.on('update', update, this);
+    
+      // Add a collider to handle collisions
+      enemy.scene.physics.add.collider(enemy, player, handlePlayerCollisionBoss);
+    }
+    
 
     function handleMovement() {
       const speed = 150;
@@ -372,6 +407,25 @@ const Phase = () => {
         loop: false,
     });
   }
+
+  function handlePlayerCollisionBoss() {
+    const pushForce = 1000;
+    healthRef.current -= 5;
+    healthText.setText(`Health : ${healthRef.current}`)
+  
+    const directionX = player.x - bossEnemy.x;
+    const directionY = player.y - bossEnemy.y;
+  
+    const length = Math.sqrt(directionX ** 2 + directionY ** 2);
+    const normalizedDirectionX = directionX / length;
+    const normalizedDirectionY = directionY / length;
+  
+    player.setVelocityX(pushForce * normalizedDirectionX);
+    player.setVelocityY(pushForce * normalizedDirectionY);
+  
+    bossEnemy.setVelocity(0, 0);
+  }
+  
 
   function handlePlayerCollision(player, enemy) {
     // console.log('Collision occurred between player and enemy');
@@ -497,6 +551,32 @@ const Phase = () => {
           console.log(scoreRef.current);
         });
       });
+
+      player.scene.physics.add.overlap(attackSprite, bossEnemy, ()=>{
+        bossHitCounter.current++;
+        let x = Phaser.Math.Between(0, 770);
+        let y = Phaser.Math.Between(0, 770);
+
+        // Check for minimum distance from the player
+        while (Phaser.Math.Distance.Between(player.x, player.y, x, y) < 100) {
+          x = Phaser.Math.Between(0, 770);
+          y = Phaser.Math.Between(0, 770);
+        }
+        if(bossHitCounter.current === 5){
+          bossEnemy.disableBody(true, true);
+          scoreRef.current += 50;
+          scoreText.setText(`Score: ${scoreRef.current}`);
+        }
+        bossEnemy.x = x;
+        bossEnemy.y = y;
+      })
+
+      // player.scene.physics.add.overlap(attackSprite, enemy, ()=>{
+      //   enemy.disableBody(true, true);
+      //   scoreRef.current += 10;
+      //   scoreText.setText(`Score: ${scoreRef.current}`);
+      //   console.log(scoreRef.current);
+      // });
 
 
       player.scene.time.delayedCall(150, () => {
