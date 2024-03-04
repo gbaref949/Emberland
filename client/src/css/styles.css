@@ -121,8 +121,7 @@ table {
   text-align: center;
 }
 .dashBoardCont .dashboard .imgCont .dashBoardImg {
-  width: 36rem;
-  height: auto;
+  height: 60vh;
 }
 .dashBoardCont .dashboard .sections {
   display: flex;
