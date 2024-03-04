@@ -1,12 +1,16 @@
 # Emberland
 
-Information
+You find yourself inexplicably thrust into a chaotic adventure. This isn't your reality, but a twisted dreamscape where enemies materialize from thin air and danger lurks around every corner. Your only goal: survive.
+
+Fight your way through relentless waves of foes, each more menacing than the last. Explore ever-shifting landscapes, where the rules are unclear and the exit remains frustratingly out of reach. Can you unravel the mystery of this warped world and defeat the mastermind behind this twisted game?
+
+The adventure awaits. Are you ready?
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `npm start`
+### `npm run start`
 Runs the app in the development mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
