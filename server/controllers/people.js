@@ -33,15 +33,20 @@ const updatePeople = async(req,res)=>{
     try {
         let {userID} = req.params;
         let {score} = req.body;
-        let changePerson = People.findOne({ userID: userID });
+        let changePerson = await People.findOne({ userID: userID });
+        console.log(userID)
+        console.log(score)
+        console.log(changePerson.overallScore);
+        console.log(changePerson.bestScore);
 
-        let all = changePerson.overallScore += score;
+        let all = changePerson.overallScore;
+        let overallScore = all + score;
         let best = changePerson.bestScore;
         if(score >= changePerson.bestScore){
             best = score;
         }
 
-        let people = await People.findOneAndUpdate({email:email}, {score:score, overallScore:overallScore, bestScore:best});
+        let people = await People.findOneAndUpdate({userID:userID}, {score:score, overallScore:overallScore, bestScore:best});
         res.json(people);
     } catch (error) {
         console.log(error);

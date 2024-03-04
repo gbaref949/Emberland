@@ -2,8 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Phase = () => {
+  let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
   const direction = useRef('W'); // Using useRef instead of useState
   const healthRef = useRef(100);
+  const scoreRef = useRef(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,7 +30,7 @@ const Phase = () => {
     };
 
     const game = new Phaser.Game(config);
-    let cursors, keys, dashTimer, healthText, regen, intervalId;
+    let cursors, keys, dashTimer, healthText, regen, intervalId, scoreText;
     let player, block1, attackSprite;
     let dashAvailable = true;
     let inDash = false;
@@ -42,6 +44,7 @@ const Phase = () => {
 
     function create() {
       healthText = this.add.text(0, 0, `Health: 100`, { fontFamily: 'Arial', fontSize: '32px', fill: '#ffffff' });
+      scoreText = this.add.text(600, 0, `Score: 0`, { fontFamily: 'Arial', fontSize: '32px', fill: '#ffffff' });
       player = this.physics.add.sprite(385, 385, 'player');
       player.setScale();
       player.setCollideWorldBounds(true);
@@ -89,9 +92,15 @@ const Phase = () => {
         handleMovement();
       }
       if (healthRef.current <= 0) {
+        let score = scoreRef.current
         game.destroy(true);
         clearInterval(regen);
         clearInterval(intervalId);
+        fetch(`http://localhost:5000/${currentUser.userID}`,{
+          method: 'PUT',
+          body: JSON.stringify({score}),
+          headers: {'Content-Type': 'application/json'},
+        })
         navigate('/gameOver');
       }
       // trackPlayerWithCollision(enemy, player);
@@ -332,6 +341,9 @@ const Phase = () => {
       newEnemies.forEach((enemy) => {
         player.scene.physics.add.overlap(attackSprite, enemy, ()=>{
           enemy.disableBody(true, true);
+          scoreRef.current += 10;
+          scoreText.setText(`Score: ${scoreRef.current}`);
+          console.log(scoreRef.current);
         });
       });
 

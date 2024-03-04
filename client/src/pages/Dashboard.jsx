@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Logo from './images/editedLogo.png';
 
@@ -6,14 +6,26 @@ const Dashboard = () => {
   const navigate = useNavigate();
   let signedIn = sessionStorage.getItem('authenticated') || false;
   let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+  const [people, setPeople] = useState([]);
 
   useEffect(()=>{
     if(signedIn == 'false'){
       console.log('navigating')
       navigate('/login');
     }
-  }, [])
-
+    fetch('http://localhost:5000/').then(response =>{
+      return response.json();
+    }).then(res=>{
+      setPeople(res);
+    });
+  }, []);
+  
+  people.map(person=>{
+    if(person.email == currentUser.email){
+      currentUser = person;
+    }
+  })
+  
   // Function to handle clicks on game menu items
   function handleGameMenuClick(event, menuItem) {
     event.preventDefault();
