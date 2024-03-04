@@ -37,6 +37,25 @@ const Phase = () => {
     let attackCooldown = true;
     let attackCooldownTimer;
     const newEnemies = [];
+    let mult = (77/260);
+    let blockValues = [
+      [500*mult, 700*mult, 200*mult, 600*mult],
+      [800*mult, 500*mult, 400*mult, 200*mult],
+      [2100*mult, 700*mult, 200*mult, 600*mult],
+      [1800*mult, 500*mult, 400*mult, 200*mult],
+      [500*mult, 1900*mult, 200*mult, 600*mult],
+      [800*mult, 2100*mult, 400*mult, 200*mult],
+      [2100*mult, 1900*mult, 200*mult, 600*mult],
+      [1800*mult, 2100*mult, 400*mult, 200*mult],
+      [900*mult, 1000*mult, 200*mult, 400*mult],
+      [900*mult, 1600*mult, 200*mult, 400*mult],
+      [1700*mult, 1000*mult, 200*mult, 400*mult],
+      [1700*mult, 1600*mult, 200*mult, 400*mult],
+      [1100*mult, 900*mult, 200*mult, 200*mult],
+      [1500*mult, 900*mult, 200*mult, 200*mult],
+      [1500*mult, 1700*mult, 200*mult, 200*mult],
+      [1100*mult, 1700*mult, 200*mult, 200*mult]
+    ];
 
     function preload() {
       this.load.image('player', '../pages/images/editedLogo.png');
@@ -46,11 +65,22 @@ const Phase = () => {
       healthText = this.add.text(0, 0, `Health: 100`, { fontFamily: 'Arial', fontSize: '32px', fill: '#ffffff' });
       scoreText = this.add.text(600, 0, `Score: 0`, { fontFamily: 'Arial', fontSize: '32px', fill: '#ffffff' });
       player = this.physics.add.sprite(385, 385, 'player');
-      player.setScale();
       player.setCollideWorldBounds(true);
+      player.setDepth(1);
 
       // attackSprite = player.scene.add.rectangle(player.x + 10 * Math.cos(player.rotation), player.y + 10 * Math.sin(player.rotation), 20, 20, 0xFF0000);
       // attackSprite.setOrigin(1, 1);
+
+      let blocks = [];
+      let temp;
+      for(let i=0;i<16;i++){
+        temp = this.add.rectangle(blockValues[i][0], blockValues[i][1], blockValues[i][2], blockValues[i][3], 0x0000ff);
+        this.physics.add.existing(temp, true);
+        this.physics.add.overlap((player.x + player.width / 2), temp, handleFallCollision);
+        this.physics.add.overlap((player.y + player.height / 2), temp, handleFallCollision);
+        temp.setDepth(0);
+        blocks.push(temp);
+      }
 
       generateEnemies(this, player);
 
@@ -106,6 +136,40 @@ const Phase = () => {
       // trackPlayerWithCollision(enemy, player);
     }
 
+    function handleFallCollision(player, block) {
+      console.log('overlap')
+      const centerX = player.x + player.width / 2
+      const centerY = player.y + player.height / 2
+      // // Calculate the overlap area based on the distance between the centers
+      // const overlapX = Math.abs(player.x - block.x) - (player.width + block.width) / 2;
+      // const overlapY = Math.abs(player.y - block.y) - (player.height + block.height) / 2;
+
+      // // If at least half of the player sprite is inside the block sprite
+      // if (overlapX < 0 && overlapY < 0) {
+      //   player.x = 200;
+      //   player.y = 200;
+      // }
+      player.x = 200;
+      player.y = 200;
+
+      // Calculate the overlap area based on the distance between the centers
+      // const overlapX = Math.abs(player.x - block.x) - (player.width + block.width) / 2;
+      // const overlapY = Math.abs(player.y - block.y) - (player.height + block.height) / 2;
+
+      // // Calculate the offset from the center of the player sprite
+      // const offsetX = Math.abs(player.x - block.x);
+      // const offsetY = Math.abs(player.y - block.y);
+
+      // // Define a threshold for overlap (adjust as needed)
+      // const overlapThreshold = 10;
+
+      // // Check if half of the player sprite is over the rectangle and the overlap is at the center
+      // if (overlapX < 0 && overlapY < 0 && offsetX <= player.width / 2 + overlapThreshold && offsetY <= player.height / 2 + overlapThreshold) {
+      //   player.x = 200;
+      //   player.y = 200;
+      // }
+    }
+
     function generateEnemies(scene) {
           
       // Generate enemies
@@ -125,7 +189,7 @@ const Phase = () => {
         const enemy = scene.physics.add.sprite(x, y, 'enemy');
         enemy.setCollideWorldBounds(true);
         scene.physics.world.enable(enemy, Phaser.Physics.Arcade.Sprite);
-        scene.physics.add.collider(player, enemy, handlePlayerCollision);
+        scene.physics.add.overlap(player, enemy, handlePlayerCollision);
 
         // Add the enemy to the tracking array
         newEnemies.push(enemy);
@@ -134,9 +198,9 @@ const Phase = () => {
         counter++;
 
         // Stop generating after a certain number of enemies (adjust as needed)
-        // if (counter >= 5) {
-        //   clearInterval(intervalId);
-        // }
+        if (counter >= 2) {
+          clearInterval(intervalId);
+        }
       }, 3000);
 
       // Update function to be called in the scene's update loop
