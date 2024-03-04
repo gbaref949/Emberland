@@ -17,9 +17,9 @@ const readPeople = async(req,res)=>{
 const createPeople = async(req,res)=>{
     try {
         let allPeople = await People.find({});
-        let {email, password} = req.body;
+        let {username, email, password} = req.body;
 
-        let newPerson = await People.create({email:email, password:password, userID:allPeople.length});
+        let newPerson = await People.create({username:username, email:email, password:password, userID:allPeople.length});
         allPeople = await People.find({});
         res.json(allPeople);
 

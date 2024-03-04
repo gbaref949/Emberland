@@ -1,7 +1,11 @@
 import React, { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Phase = () => {
   const direction = useRef('W'); // Using useRef instead of useState
+  const healthRef = useRef(100);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const Phaser = require('phaser');
 
@@ -24,7 +28,7 @@ const Phase = () => {
     };
 
     const game = new Phaser.Game(config);
-    let cursors, keys, dashTimer;
+    let cursors, keys, dashTimer, healthText, regen, intervalId;
     let player, block1, attackSprite;
     let dashAvailable = true;
     let inDash = false;
@@ -37,6 +41,7 @@ const Phase = () => {
     }
 
     function create() {
+      healthText = this.add.text(0, 0, `Health: 100`, { fontFamily: 'Arial', fontSize: '32px', fill: '#ffffff' });
       player = this.physics.add.sprite(385, 385, 'player');
       player.setScale();
       player.setCollideWorldBounds(true);
@@ -66,11 +71,28 @@ const Phase = () => {
         D: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
         SHIFT: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT),
       };
+
+      regen = setInterval(()=>{
+        console.log(healthRef.current)
+        if(healthRef.current <= 95){
+          healthRef.current += 5;
+          healthText.setText(`Health: ${healthRef.current}`);
+        }else if(healthRef.current > 95){
+          healthRef.current = 100;
+          healthText.setText(`Health: ${healthRef.current}`);
+        }
+      }, 5000);
     }
 
     function update() {
       if(!inDash) {
         handleMovement();
+      }
+      if (healthRef.current <= 0) {
+        game.destroy(true);
+        clearInterval(regen);
+        clearInterval(intervalId);
+        navigate('/gameOver');
       }
       // trackPlayerWithCollision(enemy, player);
     }
@@ -81,7 +103,7 @@ const Phase = () => {
       let counter = 0;
 
       // Generate enemies at regular intervals
-      const intervalId = setInterval(() => {
+      intervalId = setInterval(() => {
         let x = Phaser.Math.Between(0, 770);
         let y = Phaser.Math.Between(0, 770);
 
@@ -103,10 +125,10 @@ const Phase = () => {
         counter++;
 
         // Stop generating after a certain number of enemies (adjust as needed)
-        if (counter >= 5) {
-          clearInterval(intervalId);
-        }
-      }, 2000);
+        // if (counter >= 5) {
+        //   clearInterval(intervalId);
+        // }
+      }, 3000);
 
       // Update function to be called in the scene's update loop
       function update() {
@@ -195,26 +217,28 @@ const Phase = () => {
     // console.log('Collision occurred between player and enemy');
 
     const pushForce = 1000;
+    healthRef.current -= 5;
+    healthText.setText(`Health: ${healthRef.current}`);
 
-    console.log('enemy: ' + enemy.x)
-    console.log('enemy: ' + enemy.y)
-    console.log('player: ' + player.x)
-    console.log('player: ' + player.y)
+    // console.log('enemy: ' + enemy.x)
+    // console.log('enemy: ' + enemy.y)
+    // console.log('player: ' + player.x)
+    // console.log('player: ' + player.y)
 
     // Calculate the direction from the enemy to the player
     const directionX = player.x - enemy.x;
     const directionY = player.y - enemy.y;
 
-    console.log('Direction X:', directionX, 'Direction Y:', directionY);
+    // console.log('Direction X:', directionX, 'Direction Y:', directionY);
 
     // Check if the length is not zero before normalization
     const length = Math.sqrt(directionX ** 2 + directionY ** 2);
-    if (length !== 0) {
+    // if (length !== 0) {
       // Normalize the direction vector
       const normalizedDirectionX = directionX / length;
       const normalizedDirectionY = directionY / length;
 
-      console.log('Normalized X:', normalizedDirectionX, 'Normalized Y:', normalizedDirectionY);
+      // console.log('Normalized X:', normalizedDirectionX, 'Normalized Y:', normalizedDirectionY);
 
       // Apply force to the player in the opposite direction
       player.setVelocityX(pushForce * normalizedDirectionX);
@@ -223,11 +247,11 @@ const Phase = () => {
       // Apply force to the enemy in the opposite direction
       enemy.setVelocity(0, 0);
 
-      console.log('Player Velocity X:', player.body.velocity.x, 'Player Velocity Y:', player.body.velocity.y);
-      console.log('Enemy Velocity X:', enemy.body.velocity.x, 'Enemy Velocity Y:', enemy.body.velocity.y);
-    } else {
-      console.log('Direction vector length is zero. Skipping normalization.');
-    }
+      // console.log('Player Velocity X:', player.body.velocity.x, 'Player Velocity Y:', player.body.velocity.y);
+      // console.log('Enemy Velocity X:', enemy.body.velocity.x, 'Enemy Velocity Y:', enemy.body.velocity.y);
+    // } else {
+    //   console.log('Direction vector length is zero. Skipping normalization.');
+    // }
   }
 
 
@@ -329,6 +353,7 @@ const Phase = () => {
   }
 
     return () => {
+      clearInterval(regen);
       game.destroy(true);
     };
   }, []);
