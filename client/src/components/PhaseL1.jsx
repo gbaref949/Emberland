@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Phase = () => {
   let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
@@ -485,16 +485,94 @@ const Phase = () => {
       });
     }
   }
+const [gamePaused, setGamePaused] = useState(false);
 
+  const handleMenuToggle = () => {
+    const menuOverlay = document.querySelector(".menu-overlay");
+    if (menuOverlay) {
+      menuOverlay.classList.toggle("open");
+      setGamePaused(!gamePaused);
+    }
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Escape") {
+      handleMenuToggle();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyPress);
     return () => {
-      clearInterval(regen);
-      game.destroy(true);
+      document.removeEventListener("keydown", handleKeyPress);
     };
   }, []);
 
+  useEffect(() => {
+    const menuLink = document.querySelector(".menu-link");
+    if (menuLink) {
+      menuLink.addEventListener("click", handleMenuToggle);
+      return () => {
+        menuLink.removeEventListener("click", handleMenuToggle);
+      };
+    }
+  }, []);
+
+  const handleResume = () => {
+    const menuOverlay = document.querySelector(".menu-overlay");
+    if (menuOverlay) {
+      menuOverlay.classList.remove("open");
+    }
+    setGamePaused(false);
+  };
+
+  const handleQuit = () => {
+    // Handle quitting logic (redirect to dashboard)
+    navigate('/dashboard');
+  };
+
+  const handleRestart = () => {
+    // Handle restarting logic (reload page)
+    window.location.reload();
+  };
+
   return (
     <>
-      <div id="game-container"></div>
+      {/* Game content */}
+      <div id="game-container">
+        {/* Game content */}
+      </div>
+      <div className='menu'>
+        <span className='menu-circle' />
+        <a href='./' className='menu-link'>
+          <span className='menu-icon'>
+            <span className='menu-line menu-line-1' />
+            <span className='menu-line menu-line-2' />
+            <span className='menu-line menu-line-3' />
+          </span>
+        </a>
+      </div>
+      <div className='menu-overlay'>
+        <div className='overlay-info'>
+          <h1>Controls</h1>
+          {/* Controls info */}
+          <ul>
+            <li>
+              <button onClick={handleResume}>Resume</button>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <button onClick={handleQuit}>Quit</button>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <button onClick={handleRestart}>Restart</button>
+            </li>
+          </ul>
+        </div>
+      </div>
     </>
   );
 };
