@@ -37,26 +37,6 @@ const Phase = () => {
     let attackCooldown = true;
     let attackCooldownTimer;
     const newEnemies = [];
-    let mult = (77/260);
-    let blockValues = [
-      [500*mult, 700*mult, 200*mult, 600*mult],
-      [800*mult, 500*mult, 400*mult, 200*mult],
-      [2100*mult, 700*mult, 200*mult, 600*mult],
-      [1800*mult, 500*mult, 400*mult, 200*mult],
-      [500*mult, 1900*mult, 200*mult, 600*mult],
-      [800*mult, 2100*mult, 400*mult, 200*mult],
-      [2100*mult, 1900*mult, 200*mult, 600*mult],
-      [1800*mult, 2100*mult, 400*mult, 200*mult],
-      [900*mult, 1000*mult, 200*mult, 400*mult],
-      [900*mult, 1600*mult, 200*mult, 400*mult],
-      [1700*mult, 1000*mult, 200*mult, 400*mult],
-      [1700*mult, 1600*mult, 200*mult, 400*mult],
-      [1100*mult, 900*mult, 200*mult, 200*mult],
-      [1500*mult, 900*mult, 200*mult, 200*mult],
-      [1500*mult, 1700*mult, 200*mult, 200*mult],
-      [1100*mult, 1700*mult, 200*mult, 200*mult]
-    ];
-    let blocks = [];
 
     function preload() {
       this.load.image('player', '../pages/images/editedLogo.png');
@@ -71,15 +51,6 @@ const Phase = () => {
 
       // attackSprite = player.scene.add.rectangle(player.x + 10 * Math.cos(player.rotation), player.y + 10 * Math.sin(player.rotation), 20, 20, 0xFF0000);
       // attackSprite.setOrigin(1, 1);
-
-      let temp;
-      for(let i=0;i<16;i++){
-        temp = this.add.rectangle(blockValues[i][0], blockValues[i][1], blockValues[i][2], blockValues[i][3], 0x0000ff);
-        this.physics.add.existing(temp, true);
-        this.physics.add.collider(player, temp, handleFallCollision);
-        temp.setDepth(0);
-        blocks.push(temp);
-      }
 
       generateEnemies(this, player);
 
