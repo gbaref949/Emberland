@@ -358,6 +358,52 @@ table {
   margin-top: 2rem;
 }
 
+.leaderboard-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  color: #fff;
+}
+.leaderboard-container h2 {
+  font-size: 5rem;
+  position: absolute;
+  top: 2.25rem;
+}
+.leaderboard-container table {
+  width: 1200px;
+  border-collapse: collapse;
+  background-color: #1e1e1e; /* Darker background color for table */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.leaderboard-container table th, .leaderboard-container table td {
+  padding: 12px;
+  text-align: left;
+  font-size: 2.5rem;
+  border-bottom: 1px solid #333; /* Darker border color */
+}
+.leaderboard-container table th {
+  background-color: #007bff; /* Blue color for header */
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
+.leaderboard-container table .usernameTitle {
+  text-align: left;
+}
+.leaderboard-container table td:nth-child(2), .leaderboard-container table td:nth-child(3) {
+  text-align: center;
+}
+.leaderboard-container table tbody tr:nth-child(even) {
+  background-color: #333; /* Darker background for even rows */
+}
+.leaderboard-container table tbody tr:hover {
+  background-color: #444; /* Darker background on hover */
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

@@ -44,7 +44,7 @@ const Dashboard = () => {
                 <Link to={'/level1'}>Play Game</Link>
               </li>
               <li>
-                <Link to={'/dashboard'}>Leaderboard</Link>
+                <Link to={'/leaderboard'}>Leaderboard</Link>
               </li>
               <li>
                 <Link to={'/'}>Logout</Link>

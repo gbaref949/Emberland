@@ -14,11 +14,13 @@ import GameOver from './components/GameOver';
 import GameContext from './pages/GameContext';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import Leaderboard from './pages/Leaderboard';
 
 const router = createBrowserRouter([
   { path: '/', element: <Register /> },
-  { path: '/Login', element: <Login /> },
+  { path: '/login', element: <Login /> },
   { path: '/dashboard', element: <Dashboard /> },
+  { path: 'leaderboard', element: <Leaderboard />},
   { path: '/gameOver', element: <GameOver /> },
   { path: '/game1', element: <Enemies /> },
   { path: '/phase', element: <Phase /> },
