@@ -240,6 +240,114 @@ table {
   text-decoration: none;
 }
 
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #1e1e1e;
+  color: #fff;
+}
+.login-container form {
+  max-width: 400px;
+  padding: 40px;
+  border-radius: 8px;
+  background-color: #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+.login-container form .form-group {
+  margin-bottom: 20px;
+}
+.login-container form .form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+.login-container form .form-group input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #444;
+  color: #fff;
+}
+.login-container form .form-group input:focus {
+  outline: none;
+  box-shadow: 0 0 4px #007bff;
+}
+.login-container form .submit-button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.login-container form .submit-button:hover {
+  background-color: #0056b3;
+}
+
+.register-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #fff;
+}
+.register-container h2 {
+  position: absolute;
+  top: 2.25rem;
+  font-size: 5rem;
+}
+.register-container form {
+  width: 800px;
+  padding: 40px;
+  border-radius: 8px;
+  background-color: #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+.register-container form .form-group {
+  margin-bottom: 20px;
+}
+.register-container form .form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 1.6rem;
+}
+.register-container form .form-group input {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #444;
+  color: #fff;
+}
+.register-container form .form-group input:focus {
+  outline: none;
+  box-shadow: 0 0 4px #007bff;
+}
+.register-container form .submit-button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.register-container form .submit-button:hover {
+  background-color: #0056b3;
+}
+.register-container form .loginLink {
+  text-align: center;
+  margin-top: 2rem;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
