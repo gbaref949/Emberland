@@ -17,13 +17,9 @@ const readPeople = async(req,res)=>{
 const createPeople = async(req,res)=>{
     try {
         let allPeople = await People.find({});
-        let {name, age, task} = req.body;
+        let {email, password} = req.body;
 
-        if(task == ''){
-            task = 'none';
-        }
-
-        let newPerson = await People.create({name:name, age:age, userID:allPeople.length+1, task:task});
+        let newPerson = await People.create({email:email, password:password, userID:allPeople.length});
         allPeople = await People.find({});
         res.json(allPeople);
 
@@ -35,16 +31,17 @@ const createPeople = async(req,res)=>{
 // put function for update people
 const updatePeople = async(req,res)=>{
     try {
-        let {email} = req.params;
-        let {balance, cart} = req.body;
-        let changePerson = People.findById(email)
+        let {userID} = req.params;
+        let {score} = req.body;
+        let changePerson = People.findOne({ userID: userID });
 
-        let bal = Number(changePerson.balance);
-        bal += Number(balance)
-        let car = changePerson.cart
-        car.push(cart);
+        let all = changePerson.overallScore += score;
+        let best = changePerson.bestScore;
+        if(score >= changePerson.bestScore){
+            best = score;
+        }
 
-        let people = await People.findOneAndUpdate({email:email}, {balance: bal, cart:car});
+        let people = await People.findOneAndUpdate({email:email}, {score:score, overallScore:overallScore, bestScore:best});
         res.json(people);
     } catch (error) {
         console.log(error);

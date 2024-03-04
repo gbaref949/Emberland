@@ -5,7 +5,7 @@ const{createPeople, readPeople, updatePeople, deletePeople} = require("../contro
 
 router.get('/', readPeople);
 router.post('/', createPeople);
-router.put('/:email', updatePeople);
+router.put('/:userID', updatePeople);
 router.delete('/:userID', deletePeople);
 
 module.exports = router;

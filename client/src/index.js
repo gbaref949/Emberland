@@ -12,9 +12,12 @@ import Level2 from './components/PhaseL2';
 import Level3 from './components/PhaseL3';
 import GameOver from './components/GameOver';
 import GameContext from './pages/GameContext';
+import Register from './pages/Register';
+import Login from './pages/Login';
 
 const router = createBrowserRouter([
-  { path: '/', element: <Home /> },
+  { path: '/', element: <Register /> },
+  { path: '/Login', element: <Login /> },
   { path: '/dashboard', element: <Dashboard /> },
   { path: '/gameOver', element: <GameOver /> },
   { path: '/game1', element: <Enemies /> },

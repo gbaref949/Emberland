@@ -1,9 +1,5 @@
 const mongoose = require('mongoose');
 const UserSchema  = new mongoose.Schema({
-    name :{
-        type : String,
-        required : true
-    },
     email:{
     type : String,
     required : true
@@ -12,25 +8,21 @@ const UserSchema  = new mongoose.Schema({
         type : String,
         required : true
     } ,
-    date :{
-        type: Date,
-        default : Date.now
+    score :{
+        type: Number,
+        default : 0,
     },
-    cart :{
-        type : Array,
-        default : []
-    },
-    balance :{
-        type : Array,
-    },
-    card :{
+    bestScore :{
         type : Number,
+        default : 0,
     },
-    icon :{
-        type : String,
+    overallScore :{
+        type : Number,
+        default: 0,
     },
-    quantity :{
-        type : Array
+    userID :{
+        type : Number,
+        default: 0,
     }
 },{collection : 'Players'});
 const User= mongoose.model('User',UserSchema);
