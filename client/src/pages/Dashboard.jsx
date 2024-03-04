@@ -57,9 +57,6 @@ const Dashboard = () => {
               <p>
                 <strong>Best Score:</strong> {currentUser.bestScore}
               </p>
-              <p>
-                <strong>Overall Score:</strong> {currentUser.overallScore}
-              </p>
             </div>
           </div>
 
@@ -84,13 +81,10 @@ const Dashboard = () => {
             <h2>Settings</h2>
             <ul>
               <li>
-                <Link to={'/dashboard'}>Sound</Link>
-              </li>
-              <li>
-                <Link to={'/dashboard'}>Graphics</Link>
-              </li>
-              <li>
                 <Link to={'/dashboard'}>Controls</Link>
+              </li>
+              <li>
+                <Link to={'https://github.com/gbaref949/Emberland'}>More Information</Link>
               </li>
             </ul>
           </div>
