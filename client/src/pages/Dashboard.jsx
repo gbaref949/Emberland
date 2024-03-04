@@ -5,13 +5,14 @@ import Logo from './images/editedLogo.png';
 const Dashboard = () => {
   const navigate = useNavigate();
   let signedIn = sessionStorage.getItem('authenticated') || false;
+  let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
 
   useEffect(()=>{
     if(signedIn == 'false'){
       console.log('navigating')
       navigate('/login');
     }
-  })
+  }, [])
 
   // Function to handle clicks on game menu items
   function handleGameMenuClick(event, menuItem) {
@@ -39,13 +40,13 @@ const Dashboard = () => {
             <h2>Player Profile</h2>
             <div className='profile-info'>
               <p>
-                <strong>Name:</strong> John Doe
+                <strong>Name:</strong> {currentUser.username}
               </p>
               <p>
-                <strong>Level:</strong> 0
+                <strong>Best Score:</strong> {currentUser.bestScore}
               </p>
               <p>
-                <strong>Score:</strong> 0
+                <strong>Overall Score:</strong> {currentUser.overallScore}
               </p>
             </div>
           </div>

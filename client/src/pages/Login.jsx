@@ -39,6 +39,7 @@ const Login = () => {
         people.map(person=>{
             if(formData.email === person.email || formData.password === person.password){
                 sessionStorage.setItem('authenticated', true);
+                sessionStorage.setItem('currentUser', JSON.stringify(person));
                 navigate('/dashboard');
             }
         })

@@ -371,6 +371,23 @@ table {
   position: absolute;
   top: 2.25rem;
 }
+.leaderboard-container .backBtn {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background-color: #1e1e1e;
+  color: white;
+  padding: 1rem;
+  font-size: 1.25rem;
+  text-decoration: none;
+  border-radius: 0.25rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.leaderboard-container .backBtn IoIosArrowBack {
+  color: white;
+}
 .leaderboard-container table {
   width: 1200px;
   border-collapse: collapse;

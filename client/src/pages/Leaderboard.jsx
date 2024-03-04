@@ -1,15 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { IoIosArrowBack } from "react-icons/io";
 
 const Leaderboard = () => {
-    const players = [
-        { username: 'Player1', bestScore: 120, overallScore: 500 },
-        { username: 'Player2', bestScore: 150, overallScore: 450 },
-        { username: 'Player3', bestScore: 100, overallScore: 550 }
-    ];
+    const navigate = useNavigate();
+    let signedIn = sessionStorage.getItem('authenticated') || false;
+    const [people, setPeople] = useState([]);
+
+    useEffect(()=>{
+        if(signedIn == 'false'){
+            console.log('navigating')
+            navigate('/login');
+        }
+        fetch('http://localhost:5000/').then(response =>{
+            return response.json();
+        }).then(res=>{
+            setPeople(res);
+        });
+    }, [])
+
+    people.sort((a, b) => b.bestScore - a.bestScore);
 
     return (
         <div className="leaderboard-container">
             <h2>Leaderboard</h2>
+            <Link to={'/dashboard'} className='backBtn'><IoIosArrowBack />Dashboard</Link>
             <table>
                 <thead>
                     <tr>
@@ -19,7 +34,7 @@ const Leaderboard = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {players.map((player, index) => (
+                    {people.map((player, index) => (
                         <tr key={index}>
                             <td>{player.username}</td>
                             <td>{player.bestScore}</td>
