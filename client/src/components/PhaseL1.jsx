@@ -56,6 +56,7 @@ const Phase = () => {
       [1500*mult, 1700*mult, 200*mult, 200*mult],
       [1100*mult, 1700*mult, 200*mult, 200*mult]
     ];
+    let blocks = [];
 
     function preload() {
       this.load.image('player', '../pages/images/editedLogo.png');
@@ -71,13 +72,11 @@ const Phase = () => {
       // attackSprite = player.scene.add.rectangle(player.x + 10 * Math.cos(player.rotation), player.y + 10 * Math.sin(player.rotation), 20, 20, 0xFF0000);
       // attackSprite.setOrigin(1, 1);
 
-      let blocks = [];
       let temp;
       for(let i=0;i<16;i++){
         temp = this.add.rectangle(blockValues[i][0], blockValues[i][1], blockValues[i][2], blockValues[i][3], 0x0000ff);
         this.physics.add.existing(temp, true);
-        this.physics.add.overlap((player.x + player.width / 2), temp, handleFallCollision);
-        this.physics.add.overlap((player.y + player.height / 2), temp, handleFallCollision);
+        this.physics.add.collider(player, temp, handleFallCollision);
         temp.setDepth(0);
         blocks.push(temp);
       }
@@ -138,8 +137,8 @@ const Phase = () => {
 
     function handleFallCollision(player, block) {
       console.log('overlap')
-      const centerX = player.x + player.width / 2
-      const centerY = player.y + player.height / 2
+      // const centerX = player.x + player.width / 2
+      // const centerY = player.y + player.height / 2
       // // Calculate the overlap area based on the distance between the centers
       // const overlapX = Math.abs(player.x - block.x) - (player.width + block.width) / 2;
       // const overlapY = Math.abs(player.y - block.y) - (player.height + block.height) / 2;
@@ -149,8 +148,24 @@ const Phase = () => {
       //   player.x = 200;
       //   player.y = 200;
       // }
-      player.x = 200;
-      player.y = 200;
+      // player.x = 200;
+      // player.y = 200;
+
+      // Calculate the distance between the center of the player sprite and the edges of the rectangle
+      // const distanceX = Math.abs(player.x - block.x);
+      // const distanceY = Math.abs(player.y - block.y);
+
+      // // Calculate the half-width and half-height of the player sprite
+      // const halfWidth = player.width / 2;
+      // const halfHeight = player.height / 2;
+
+      // // Check if the center of the player sprite is outside the rectangle
+      // if (distanceX > block.width / 2 + halfWidth || distanceY > block.height / 2 + halfHeight) {
+      //     // Custom logic for overlap
+      //     console.log('Center overlap with the outside occurred');
+      //     player.x = 200;
+      //     player.y = 200;
+      // }
 
       // Calculate the overlap area based on the distance between the centers
       // const overlapX = Math.abs(player.x - block.x) - (player.width + block.width) / 2;
@@ -168,6 +183,78 @@ const Phase = () => {
       //   player.x = 200;
       //   player.y = 200;
       // }
+
+      // Calculate the distance between the centers of the player sprite and the rectangle
+      // const distanceX = Math.abs(player.x - block.x);
+      // const distanceY = Math.abs(player.y - block.y);
+
+      // // Calculate the sum of half the width of the player sprite and half the width of the rectangle
+      // const combinedHalfWidth = player.width / 2 + block.width / 2;
+      // const combinedHalfHeight = player.height / 2 + block.height / 2;
+
+      // // Calculate the distance from the center of the player sprite to the edge of the player sprite
+      // const playerEdgeX = player.width / 2;
+      // const playerEdgeY = player.height / 2;
+
+      // // Check if the centers are not overlapping and the center of the player sprite is outside the rectangle
+      // if (distanceX > combinedHalfWidth - playerEdgeX || distanceY > combinedHalfHeight - playerEdgeY) {
+      //     // Custom logic for overlap
+      //     console.log('Center overlap with the outside occurred');
+      //     player.x = 200;
+      //     player.y = 200;
+      // }
+
+      // Calculate the center position of the player sprite
+    //   const playerCenterX = player.x;
+    // const playerCenterY = player.y;
+
+    // // Create a point representing the center of the player sprite
+    // const playerCenterPoint = new Phaser.Geom.Point(playerCenterX, playerCenterY);
+
+    // // Create a rectangle representing the block
+    // const blockRect = new Phaser.Geom.Rectangle(block.x - block.width / 2, block.y - block.height / 2, block.width, block.height);
+
+    // // Check if the center point of the player sprite is within a certain distance of the rectangle edges
+    // const distanceThreshold = 25; // Adjust the threshold as needed
+    // const isOverlap = Phaser.Geom.Rectangle.Overlaps(blockRect, playerCenterX - distanceThreshold, playerCenterY - distanceThreshold, distanceThreshold * 2, distanceThreshold * 2);
+
+    //   // Check if the center point of the player sprite is outside the rectangle
+    //   if (isOverlap) {
+    //       // Custom logic for overlap
+    //       console.log('Center overlap with the outside occurred');
+    //       player.x = 200;
+    //       player.y = 200;
+    //   }
+
+    // Iterate through the blocks and check for overlap with the center of the player sprite
+        // // Adjust the threshold as needed
+        // const distanceThreshold = 25;
+
+        // // Calculate the center point of the player sprite
+        // const playerCenterX = player.x + player.displayWidth / 2;
+        // const playerCenterY = player.y + player.displayHeight / 2;
+
+        // // Calculate the distance between the center point and the corners of the player sprite
+        // const distanceToTopLeft = Phaser.Math.Distance.Between(playerCenterX, playerCenterY, player.x, player.y);
+        // const distanceToTopRight = Phaser.Math.Distance.Between(playerCenterX, playerCenterY, player.x + player.displayWidth, player.y);
+        // const distanceToBottomLeft = Phaser.Math.Distance.Between(playerCenterX, playerCenterY, player.x, player.y + player.displayHeight);
+        // const distanceToBottomRight = Phaser.Math.Distance.Between(playerCenterX, playerCenterY, player.x + player.displayWidth, player.y + player.displayHeight);
+
+        // // Check if any corner is within the distance threshold
+        // const isOverlap = (
+        //     distanceToTopLeft < distanceThreshold ||
+        //     distanceToTopRight < distanceThreshold ||
+        //     distanceToBottomLeft < distanceThreshold ||
+        //     distanceToBottomRight < distanceThreshold
+        // );
+
+        // // Check if there is an overlap
+        // if (isOverlap) {
+        //     // Custom logic for overlap
+        //     console.log('Center overlap with the rectangle edges occurred');
+        //     player.x = 100;
+        //     player.y = 100;
+        // }
     }
 
     function generateEnemies(scene) {
