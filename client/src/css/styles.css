@@ -559,25 +559,21 @@ table {
   flex-direction: row;
   align-items: center;
 }
-.controls-container .backBtn IoIosArrowBack {
-  color: white;
-}
 .controls-container h2 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  font-size: 5rem;
+  position: absolute;
+  top: 2.25rem;
 }
 .controls-container .control-info {
   text-align: center;
 }
 .controls-container .control-info p {
   margin: 10px 0;
-  font-size: 1.2rem;
+  font-size: 3rem;
 }
 .controls-container .control-info strong {
   font-weight: bold;
+  color: lightblue;
 }
 
 .victoryCont {
