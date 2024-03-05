@@ -81,7 +81,7 @@ const Dashboard = () => {
             <h2>Settings</h2>
             <ul>
               <li>
-                <Link to={'/dashboard'}>Controls</Link>
+                <Link to={'/controls'}>Controls</Link>
               </li>
               <li>
                 <Link to={'https://github.com/gbaref949/Emberland'}>More Information</Link>
