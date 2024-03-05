@@ -41,7 +41,8 @@ const Phase = () => {
     const newEnemies = [];
 
     function preload() {
-      this.load.image('player', '../pages/images/editedLogo.png');
+      this.load.image('player', '../pages/images/');
+      this.load.image('enemy ', '../../pages/assets/enemy_5.png');
     }
 
     function create() {

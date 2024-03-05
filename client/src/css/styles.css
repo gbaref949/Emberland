@@ -545,6 +545,23 @@ table {
   color: #fff;
   margin-top: 20px;
 }
+.controls-container .backBtn {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background-color: #1e1e1e;
+  color: white;
+  padding: 1rem;
+  font-size: 1.25rem;
+  text-decoration: none;
+  border-radius: 0.25rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.controls-container .backBtn IoIosArrowBack {
+  color: white;
+}
 .controls-container h2 {
   font-size: 2.5rem;
   margin-bottom: 10px;

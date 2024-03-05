@@ -403,7 +403,7 @@ const Phase = () => {
               body: JSON.stringify({score}),
               headers: {'Content-Type': 'application/json'},
             });
-            navigate('/dashboard');
+            navigate('/victory');
           }
           bossEnemy.x = x;
           bossEnemy.y = y;
