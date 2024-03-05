@@ -1,0 +1,31 @@
+.victoryCont{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 90vh;
+    
+    .victoryTitle {
+        font-size: 5rem;
+    }
+
+    .victoryImg {
+        height: 60vh;
+    }
+
+    .victoryBtnCont{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+
+        .victoryBtn{
+            font-size: 2rem;
+            background-color: #f0f0f0;
+            color: rgb(32, 32, 32);
+            padding: 1rem;
+            margin: 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+    }
+}
