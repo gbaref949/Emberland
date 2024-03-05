@@ -339,14 +339,12 @@ const Phase = () => {
           scene.scene.resume();
         }
       });
-
-      // Additional logic to resume other game components
     };
 
     destroyGame = () =>{
-      game.destroy(true);
       clearInterval(intervalId);
       clearInterval(regen);
+      game.destroy(true);
     }
 
     return () => {
@@ -397,13 +395,9 @@ const Phase = () => {
     }
   }, []);
 
-  const handleResume = () => {
-    const menuOverlay = document.querySelector(".menu-overlay");
-    if (menuOverlay) {
-      menuOverlay.classList.remove("open");
-    }
-    resumeGame();
-  };
+  function restart(){
+    window.location.reload();
+  }
 
   return (
     <>
@@ -427,7 +421,7 @@ const Phase = () => {
           {/* Controls info */}
 
           <Link to={'/dashboard'} className='menuBtn' onClick={()=> destroyGame()}>Quit</Link>
-          <Link to={'/level1'} className='menuBtn'>Restart</Link>
+          <Link className='menuBtn' onClick={()=>restart()}>Restart</Link>
         </div>
       </div>
     </>
