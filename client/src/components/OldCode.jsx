@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Phase = () => {
     let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
@@ -7,6 +7,9 @@ const Phase = () => {
     const healthRef = useRef(100);
     const scoreRef = useRef(0);
     const navigate = useNavigate();
+    const bossHitCounter = useRef(0);
+    let game;
+    let pauseGame, resumeGame, destroyGame;
 
     useEffect(() => {
         const Phaser = require('phaser');
@@ -29,9 +32,9 @@ const Phase = () => {
         },
         };
 
-        const game = new Phaser.Game(config);
+        game = new Phaser.Game(config);
         let cursors, keys, dashTimer, healthText, regen, intervalId, scoreText;
-        let player, block1, attackSprite;
+        let player, block1, attackSprite, bossEnemy;
         let dashAvailable = true;
         let inDash = false;
         let attackCooldown = true;
@@ -69,31 +72,25 @@ const Phase = () => {
         player.setCollideWorldBounds(true);
         player.setDepth(1);
 
-        // attackSprite = player.scene.add.rectangle(player.x + 10 * Math.cos(player.rotation), player.y + 10 * Math.sin(player.rotation), 20, 20, 0xFF0000);
-        // attackSprite.setOrigin(1, 1);
+        // Create boss enemy
+        bossEnemy = this.physics.add.sprite(100, 100, 'bossEnemy'); // Spawn boss enemy in top left corner
+        bossEnemy.setScale(2); // Make boss enemy twice as big as player
+        bossEnemy.setCollideWorldBounds(true);
+        bossEnemy.setDepth(1);
+        this.physics.add.collider(bossEnemy, player, handlePlayerCollisionBoss);
 
         let temp;
         for(let i=0;i<16;i++){
             temp = this.add.rectangle(blockValues[i][0], blockValues[i][1], blockValues[i][2], blockValues[i][3], 0x0000ff);
             this.physics.add.existing(temp, true);
-            this.physics.add.collider(player, temp, handleFallCollision);
+            this.physics.add.collider(player, temp);
             temp.setDepth(0);
             blocks.push(temp);
         }
 
         generateEnemies(this, player);
 
-        // enemy = this.physics.add.sprite(600, 600, 'enemy');
-        // enemy.setCollideWorldBounds(true);
-        // player.scene.physics.world.enable(enemy, Phaser.Physics.Arcade.Sprite);
-
-        // this.physics.add.collider(player, enemy, handlePlayerCollision);
-
         this.input.on('pointerdown', handleAttack);
-        // this.input.keyboard.on('keydown-W', handleNorth);
-        // this.input.keyboard.on('keydown-D', handleEast);
-        // this.input.keyboard.on('keydown-S', handleSouth);
-        // this.input.keyboard.on('keydown-A', handleWest);
 
         cursors = this.input.keyboard.createCursorKeys();
         keys = {
@@ -117,7 +114,7 @@ const Phase = () => {
         }
 
         function update() {
-        if(!inDash) {
+        if (!inDash) {
             handleMovement();
         }
         if (healthRef.current <= 0) {
@@ -125,140 +122,18 @@ const Phase = () => {
             game.destroy(true);
             clearInterval(regen);
             clearInterval(intervalId);
-            fetch(`http://localhost:5000/${currentUser.userID}`,{
+            fetch(`http://localhost:5000/${currentUser.userID}`, {
             method: 'PUT',
-            body: JSON.stringify({score}),
-            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ score }),
+            headers: { 'Content-Type': 'application/json' },
             })
             navigate('/gameOver');
         }
-        // trackPlayerWithCollision(enemy, player);
-        }
-
-        function handleFallCollision(player, block) {
-        console.log('overlap')
-        // const centerX = player.x + player.width / 2
-        // const centerY = player.y + player.height / 2
-        // // Calculate the overlap area based on the distance between the centers
-        // const overlapX = Math.abs(player.x - block.x) - (player.width + block.width) / 2;
-        // const overlapY = Math.abs(player.y - block.y) - (player.height + block.height) / 2;
-
-        // // If at least half of the player sprite is inside the block sprite
-        // if (overlapX < 0 && overlapY < 0) {
-        //   player.x = 200;
-        //   player.y = 200;
-        // }
-        // player.x = 200;
-        // player.y = 200;
-
-        // Calculate the distance between the center of the player sprite and the edges of the rectangle
-        // const distanceX = Math.abs(player.x - block.x);
-        // const distanceY = Math.abs(player.y - block.y);
-
-        // // Calculate the half-width and half-height of the player sprite
-        // const halfWidth = player.width / 2;
-        // const halfHeight = player.height / 2;
-
-        // // Check if the center of the player sprite is outside the rectangle
-        // if (distanceX > block.width / 2 + halfWidth || distanceY > block.height / 2 + halfHeight) {
-        //     // Custom logic for overlap
-        //     console.log('Center overlap with the outside occurred');
-        //     player.x = 200;
-        //     player.y = 200;
-        // }
-
-        // Calculate the overlap area based on the distance between the centers
-        // const overlapX = Math.abs(player.x - block.x) - (player.width + block.width) / 2;
-        // const overlapY = Math.abs(player.y - block.y) - (player.height + block.height) / 2;
-
-        // // Calculate the offset from the center of the player sprite
-        // const offsetX = Math.abs(player.x - block.x);
-        // const offsetY = Math.abs(player.y - block.y);
-
-        // // Define a threshold for overlap (adjust as needed)
-        // const overlapThreshold = 10;
-
-        // // Check if half of the player sprite is over the rectangle and the overlap is at the center
-        // if (overlapX < 0 && overlapY < 0 && offsetX <= player.width / 2 + overlapThreshold && offsetY <= player.height / 2 + overlapThreshold) {
-        //   player.x = 200;
-        //   player.y = 200;
-        // }
-
-        // Calculate the distance between the centers of the player sprite and the rectangle
-        // const distanceX = Math.abs(player.x - block.x);
-        // const distanceY = Math.abs(player.y - block.y);
-
-        // // Calculate the sum of half the width of the player sprite and half the width of the rectangle
-        // const combinedHalfWidth = player.width / 2 + block.width / 2;
-        // const combinedHalfHeight = player.height / 2 + block.height / 2;
-
-        // // Calculate the distance from the center of the player sprite to the edge of the player sprite
-        // const playerEdgeX = player.width / 2;
-        // const playerEdgeY = player.height / 2;
-
-        // // Check if the centers are not overlapping and the center of the player sprite is outside the rectangle
-        // if (distanceX > combinedHalfWidth - playerEdgeX || distanceY > combinedHalfHeight - playerEdgeY) {
-        //     // Custom logic for overlap
-        //     console.log('Center overlap with the outside occurred');
-        //     player.x = 200;
-        //     player.y = 200;
-        // }
-
-        // Calculate the center position of the player sprite
-        //   const playerCenterX = player.x;
-        // const playerCenterY = player.y;
-
-        // // Create a point representing the center of the player sprite
-        // const playerCenterPoint = new Phaser.Geom.Point(playerCenterX, playerCenterY);
-
-        // // Create a rectangle representing the block
-        // const blockRect = new Phaser.Geom.Rectangle(block.x - block.width / 2, block.y - block.height / 2, block.width, block.height);
-
-        // // Check if the center point of the player sprite is within a certain distance of the rectangle edges
-        // const distanceThreshold = 25; // Adjust the threshold as needed
-        // const isOverlap = Phaser.Geom.Rectangle.Overlaps(blockRect, playerCenterX - distanceThreshold, playerCenterY - distanceThreshold, distanceThreshold * 2, distanceThreshold * 2);
-
-        //   // Check if the center point of the player sprite is outside the rectangle
-        //   if (isOverlap) {
-        //       // Custom logic for overlap
-        //       console.log('Center overlap with the outside occurred');
-        //       player.x = 200;
-        //       player.y = 200;
-        //   }
-
-        // Iterate through the blocks and check for overlap with the center of the player sprite
-            // // Adjust the threshold as needed
-            // const distanceThreshold = 25;
-
-            // // Calculate the center point of the player sprite
-            // const playerCenterX = player.x + player.displayWidth / 2;
-            // const playerCenterY = player.y + player.displayHeight / 2;
-
-            // // Calculate the distance between the center point and the corners of the player sprite
-            // const distanceToTopLeft = Phaser.Math.Distance.Between(playerCenterX, playerCenterY, player.x, player.y);
-            // const distanceToTopRight = Phaser.Math.Distance.Between(playerCenterX, playerCenterY, player.x + player.displayWidth, player.y);
-            // const distanceToBottomLeft = Phaser.Math.Distance.Between(playerCenterX, playerCenterY, player.x, player.y + player.displayHeight);
-            // const distanceToBottomRight = Phaser.Math.Distance.Between(playerCenterX, playerCenterY, player.x + player.displayWidth, player.y + player.displayHeight);
-
-            // // Check if any corner is within the distance threshold
-            // const isOverlap = (
-            //     distanceToTopLeft < distanceThreshold ||
-            //     distanceToTopRight < distanceThreshold ||
-            //     distanceToBottomLeft < distanceThreshold ||
-            //     distanceToBottomRight < distanceThreshold
-            // );
-
-            // // Check if there is an overlap
-            // if (isOverlap) {
-            //     // Custom logic for overlap
-            //     console.log('Center overlap with the rectangle edges occurred');
-            //     player.x = 100;
-            //     player.y = 100;
-            // }
+        // Track player with collision for boss enemy
+        trackPlayerWithCollisionBoss(bossEnemy, player);
         }
 
         function generateEnemies(scene) {
-            
         // Generate enemies
         let counter = 0;
 
@@ -283,12 +158,7 @@ const Phase = () => {
 
             // Increment counter
             counter++;
-
-            // Stop generating after a certain number of enemies (adjust as needed)
-            if (counter >= 2) {
-            clearInterval(intervalId);
-            }
-        }, 3000);
+        }, 2000);
 
         // Update function to be called in the scene's update loop
         function update() {
@@ -301,6 +171,29 @@ const Phase = () => {
         scene.events.on('update', update);
         }
 
+        function trackPlayerWithCollisionBoss(enemy, player) {
+        const speed = 50; // Adjust the speed as needed
+        
+        // Create Phaser.Vector2 instances for enemy and player positions
+        const enemyPosition = new Phaser.Math.Vector2(enemy.x, enemy.y);
+        const playerPosition = new Phaser.Math.Vector2(player.x, player.y);
+        
+        // Update function to be called in the scene's update loop
+        function update() {
+            // Calculate the direction vector from enemy to player
+            const direction = playerPosition.clone().subtract(enemyPosition).normalize();
+        
+            // Set the velocity based on the normalized direction
+            enemy.setVelocity(direction.x * speed, direction.y * speed);
+        }
+        
+        // Update function is added to the scene's update method
+        enemy.scene.events.on('update', update, this);
+        
+        // Add a collider to handle collisions
+        enemy.scene.physics.add.collider(enemy, player, handlePlayerCollisionBoss);
+        }
+        
 
         function handleMovement() {
         const speed = 150;
@@ -334,9 +227,9 @@ const Phase = () => {
             inDash = true;
             dash();
         }
-    }
+        }
 
-    function dash() {
+        function dash() {
         let dashX = 0;
         let dashY = 0;
 
@@ -371,29 +264,38 @@ const Phase = () => {
             callbackScope: this,
             loop: false,
         });
-    }
+        }
 
-    function handlePlayerCollision(player, enemy) {
-        // console.log('Collision occurred between player and enemy');
+        function handlePlayerCollisionBoss() {
+        const pushForce = 1500;
+        healthRef.current -= 15;
+        healthText.setText(`Health : ${healthRef.current}`)
+        
+        const directionX = player.x - bossEnemy.x;
+        const directionY = player.y - bossEnemy.y;
+        
+        const length = Math.sqrt(directionX ** 2 + directionY ** 2);
+        const normalizedDirectionX = directionX / length;
+        const normalizedDirectionY = directionY / length;
+        
+        player.setVelocityX(pushForce * normalizedDirectionX);
+        player.setVelocityY(pushForce * normalizedDirectionY);
+        
+        bossEnemy.setVelocity(0, 0);
+        }
+        
 
+        function handlePlayerCollision(player, enemy) {
         const pushForce = 1000;
         healthRef.current -= 5;
         healthText.setText(`Health: ${healthRef.current}`);
-
-        // console.log('enemy: ' + enemy.x)
-        // console.log('enemy: ' + enemy.y)
-        // console.log('player: ' + player.x)
-        // console.log('player: ' + player.y)
 
         // Calculate the direction from the enemy to the player
         const directionX = player.x - enemy.x;
         const directionY = player.y - enemy.y;
 
-        // console.log('Direction X:', directionX, 'Direction Y:', directionY);
-
         // Check if the length is not zero before normalization
         const length = Math.sqrt(directionX ** 2 + directionY ** 2);
-        // if (length !== 0) {
         // Normalize the direction vector
         const normalizedDirectionX = directionX / length;
         const normalizedDirectionY = directionY / length;
@@ -406,17 +308,10 @@ const Phase = () => {
 
         // Apply force to the enemy in the opposite direction
         enemy.setVelocity(0, 0);
+        }
 
-        // console.log('Player Velocity X:', player.body.velocity.x, 'Player Velocity Y:', player.body.velocity.y);
-        // console.log('Enemy Velocity X:', enemy.body.velocity.x, 'Enemy Velocity Y:', enemy.body.velocity.y);
-        // } else {
-        //   console.log('Direction vector length is zero. Skipping normalization.');
-        // }
-    }
-
-
-    function trackPlayerWithCollision(enemy, player) {
-        const speed = 50; // Adjust the speed as needed
+        function trackPlayerWithCollision(enemy, player) {
+        const speed = Phaser.Math.Between(65, 75);; // Adjust the speed as needed
 
         // Create Phaser.Vector2 instances for enemy and player positions
         const enemyPosition = new Phaser.Math.Vector2(enemy.x, enemy.y);
@@ -433,87 +328,126 @@ const Phase = () => {
 
         // Update function is added to the scene's update method
         enemy.scene.events.on('update', update, this);
+        }
 
-        // Add a collider to handle collisions
-        // enemy.scene.physics.add.collider(block1, enemy, handleCollision);
-    }
-
-    function handleAttack() {
+        function handleAttack() {
         if (attackCooldown) {
-        attackCooldown = false;
-        const attackDistance = 10;
-        const attackAngle = player.rotation;
-        console.log(direction.current)
+            attackCooldown = false;
+            const attackDistance = 10;
+            const attackAngle = player.rotation;
 
-        if (direction.current === 'W') {
+            if (direction.current === 'W') {
             const attackX = player.x + attackDistance * Math.cos(attackAngle);
             const attackY = player.y + attackDistance * Math.sin(attackAngle);
-            // attackSprite = player.scene.add.rectangle(attackX, attackY, 20, 50, 0xFF0000);
-            // attackSprite.setOrigin(1, 1);
             attackSprite = player.scene.physics.add.sprite(attackX, attackY, 'attackTexture');
             attackSprite.displayWidth = 20;
             attackSprite.displayHeight = 50;
             attackSprite.setOrigin(1, 1);
-        } else if (direction.current === 'D') {
+            } else if (direction.current === 'D') {
             const attackX = player.x + attackDistance * Math.cos(attackAngle);
             const attackY = player.y + attackDistance * Math.sin(attackAngle);
-            // attackSprite = player.scene.add.rectangle(attackX, attackY, 50, 20, 0xFF0000);
-            // attackSprite.setOrigin(0, 0.5);
             attackSprite = player.scene.physics.add.sprite(attackX, attackY, 'attackTexture');
             attackSprite.displayWidth = 50;
             attackSprite.displayHeight = 20;
             attackSprite.setOrigin(0, 0.5);
-        } else if (direction.current === 'S') {
+            } else if (direction.current === 'S') {
             const attackX = player.x - attackDistance * Math.cos(attackAngle); // Subtracting for downward movement
             const attackY = player.y - attackDistance * Math.sin(attackAngle); // Subtracting for downward movement
-            // attackSprite = player.scene.add.rectangle(attackX, attackY, 20, 50, 0xFF0000);
-            // attackSprite.setOrigin(0, 0); // Origin changed for downward movement
             attackSprite = player.scene.physics.add.sprite(attackX, attackY, 'attackTexture');
             attackSprite.displayWidth = 20;
             attackSprite.displayHeight = 50;
             attackSprite.setOrigin(0, 0);
-        } else if (direction.current === 'A') {
+            } else if (direction.current === 'A') {
             const attackX = player.x - attackDistance * Math.cos(attackAngle); // Subtracting for leftward movement
             const attackY = player.y - attackDistance * Math.sin(attackAngle); // Subtracting for leftward movement
-            // attackSprite = player.scene.add.rectangle(attackX, attackY, 50, 20, 0xFF0000);
-            // attackSprite.setOrigin(1, 0.5); // Origin changed for leftward movement
             attackSprite = player.scene.physics.add.sprite(attackX, attackY, 'attackTexture');
             attackSprite.displayWidth = 50;
             attackSprite.displayHeight = 20;
             attackSprite.setOrigin(1, 0.5);
-        }
+            }
 
-        // Enable physics on attackSprite
-        player.scene.physics.world.enable(attackSprite);
+            // Enable physics on attackSprite
+            player.scene.physics.world.enable(attackSprite);
 
-        // Add attackSprite to the physics world
-        player.scene.physics.world.add(attackSprite);
-        player.scene.physics.world.enable(attackSprite, Phaser.Physics.Arcade.Sprite);
-        newEnemies.forEach((enemy) => {
+            // Add attackSprite to the physics world
+            player.scene.physics.world.add(attackSprite);
+            player.scene.physics.world.enable(attackSprite, Phaser.Physics.Arcade.Sprite);
+            newEnemies.forEach((enemy) => {
             player.scene.physics.add.overlap(attackSprite, enemy, ()=>{
-            enemy.disableBody(true, true);
-            scoreRef.current += 10;
-            scoreText.setText(`Score: ${scoreRef.current}`);
-            console.log(scoreRef.current);
+                enemy.disableBody(true, true);
+                scoreRef.current += 10;
+                scoreText.setText(`Score: ${scoreRef.current}`);
+                console.log(scoreRef.current);
             });
-        });
+            });
 
+            player.scene.physics.add.overlap(attackSprite, bossEnemy, ()=>{
+            bossHitCounter.current++;
+            scoreRef.current += 20;
+            scoreText.setText(`Score: ${scoreRef.current}`);
+            let x = Phaser.Math.Between(0, 770);
+            let y = Phaser.Math.Between(0, 770);
 
-        player.scene.time.delayedCall(150, () => {
+            // Check for minimum distance from the player
+            while (Phaser.Math.Distance.Between(player.x, player.y, x, y) < 100) {
+                x = Phaser.Math.Between(0, 770);
+                y = Phaser.Math.Between(0, 770);
+            }
+            if(bossHitCounter.current === 30){
+                bossEnemy.disableBody(true, true);
+                scoreRef.current += 700;
+                let score = scoreRef.current
+                scoreText.setText(`Score: ${scoreRef.current}`);
+                fetch(`http://localhost:5000/${currentUser.userID}`,{
+                method: 'PUT',
+                body: JSON.stringify({score}),
+                headers: {'Content-Type': 'application/json'},
+                });
+                navigate('/victory');
+            }
+            bossEnemy.x = x;
+            bossEnemy.y = y;
+            })
+
+            player.scene.time.delayedCall(150, () => {
             attackSprite.destroy();
-        });
+            });
 
-        attackCooldownTimer = player.scene.time.addEvent({
+            attackCooldownTimer = player.scene.time.addEvent({
             delay: 500, // 0.5 seconds cooldown
             callback: () => {
-            attackCooldown = true;
-            attackCooldownTimer.destroy();
+                attackCooldown = true;
+                attackCooldownTimer.destroy();
             },
             callbackScope: this,
             loop: false,
-        });
+            });
         }
-    }
+        }
+
+        pauseGame = () => {
+        // Pause everything in the game
+        game.scene.scenes.forEach((scene) => {
+            if (scene.scene.pause) {
+            scene.scene.pause();
+            }
+        });
+        };
+
+        resumeGame = () => {
+        // Resume everything in the game
+        game.scene.scenes.forEach((scene) => {
+            if (scene.scene.resume) {
+            scene.scene.resume();
+            }
+        });
+        };
+
+        destroyGame = () =>{
+        clearInterval(intervalId);
+        clearInterval(regen);
+        game.destroy(true);
+        }
 
         return () => {
         clearInterval(regen);
@@ -521,9 +455,77 @@ const Phase = () => {
         };
     }, []);
 
+    const handleMenuToggle = () => {
+        const menuOverlay = document.querySelector(".menu-overlay");
+        if (menuOverlay) {
+        menuOverlay.classList.toggle("open");
+
+        // Pause or resume the game based on the menu state
+        if (menuOverlay.classList.contains("open")) {
+            // Menu is open, pause the game
+            pauseGame();
+        } else {
+            // Menu is closed, resume the game
+            resumeGame();
+        }
+        }
+    };
+
+    const handleKeyPress = (event) => {
+        if (event.key === "Escape") {
+        handleMenuToggle();
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("keydown", handleKeyPress);
+        return () => {
+        document.removeEventListener("keydown", handleKeyPress);
+        };
+    }, []);
+
+    useEffect(() => {
+        const menuLink = document.querySelector(".menu-link");
+        if (menuLink) {
+        menuLink.addEventListener("click", (event) => {
+            event.preventDefault();
+            handleMenuToggle();
+        });
+        return () => {
+            menuLink.removeEventListener("click", handleMenuToggle);
+        };
+        }
+    }, []);
+
+    function restart(){
+        window.location.reload();
+    }
+
     return (
         <>
-        <div id="game-container"></div>
+        {/* Game content */}
+        <div id="game-container">
+            {/* Game content */}
+        </div>
+        <div className='menu'>
+            <span className='menu-circle' />
+            <a className='menu-link'>
+            <span className='menu-icon'>
+                <span className='menu-line menu-line-1' />
+                <span className='menu-line menu-line-2' />
+                <span className='menu-line menu-line-3' />
+            </span>
+            </a>
+        </div>
+        <div className='menu-overlay'>
+            <div className='overlay-info'>
+            {/* <h1>Controls</h1> */}
+            {/* Controls info */}
+
+            <Link to={'/dashboard'} className='menuBtn' onClick={()=> destroyGame()}>Quit</Link>
+            <Link className='menuBtn' onClick={()=>restart()}>Restart</Link>
+            </div>
+        </div>
         </>
     );
 };
