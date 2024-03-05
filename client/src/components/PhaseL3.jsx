@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import trophy from '../pages/assets/player.png';
-import enemy from '../pages/assets/fire_bckg_1.png';
+import enemy from '../pages/assets/final_boss_3.png';
+import bossEnemy from '../pages/assets/final_boss.png'
 
 const Phase = () => {
   let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
@@ -66,6 +67,7 @@ const Phase = () => {
     function preload() {
       this.load.image('player', trophy);
       this.load.image('enemy', enemy);
+      this.load.image('bossEnemy', bossEnemy);
     }
 
     function create() {
@@ -81,6 +83,7 @@ const Phase = () => {
       bossEnemy.setScale(2); // Make boss enemy twice as big as player
       bossEnemy.setCollideWorldBounds(true);
       bossEnemy.setDepth(1);
+      player.setScale(0.2);
       this.physics.add.collider(bossEnemy, player, handlePlayerCollisionBoss);
 
       let temp;
@@ -154,7 +157,7 @@ const Phase = () => {
 
         const enemy = scene.physics.add.sprite(x, y, 'enemy');
         enemy.setCollideWorldBounds(true);
-        enemy.setScale(0.2);
+        enemy.setScale(0.1);
         scene.physics.world.enable(enemy, Phaser.Physics.Arcade.Sprite);
         scene.physics.add.overlap(player, enemy, handlePlayerCollision);
 

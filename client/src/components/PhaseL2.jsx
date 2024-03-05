@@ -137,7 +137,7 @@ const Phase = () => {
 
         const enemy = scene.physics.add.sprite(x, y, 'enemy');
         enemy.setCollideWorldBounds(true);
-        enemy.setScale(0.2);
+        enemy.setScale(0.15);
         scene.physics.world.enable(enemy, Phaser.Physics.Arcade.Sprite);
         scene.physics.add.overlap(player, enemy, handlePlayerCollision);
 
