@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import trophy from '../pages/images/trophy.png'
 
 const Phase = () => {
   let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
@@ -41,7 +42,7 @@ const Phase = () => {
     const newEnemies = [];
 
     function preload() {
-      this.load.image('player', '../pages/images/editedLogo.png');
+      this.load.image('player', trophy);
     }
 
     function create() {
@@ -50,6 +51,7 @@ const Phase = () => {
       player = this.physics.add.sprite(385, 385, 'player');
       player.setCollideWorldBounds(true);
       player.setDepth(1);
+      player.setScale(0.2)
 
       generateEnemies(this, player);
 
