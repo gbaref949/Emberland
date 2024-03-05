@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import trophy from '../pages/assets/player.png';
 import enemy from '../pages/assets/final_boss_3.png';
-import bossEnemy from '../pages/assets/final_boss.png'
+import bossEnemy2 from '../pages/assets/final_boss.png'
 
 const Phase = () => {
   let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
@@ -67,7 +67,7 @@ const Phase = () => {
     function preload() {
       this.load.image('player', trophy);
       this.load.image('enemy', enemy);
-      this.load.image('bossEnemy', bossEnemy);
+      this.load.image('bossEnemy', bossEnemy2);
     }
 
     function create() {
@@ -83,7 +83,7 @@ const Phase = () => {
       bossEnemy.setScale(2); // Make boss enemy twice as big as player
       bossEnemy.setCollideWorldBounds(true);
       bossEnemy.setDepth(1);
-      player.setScale(0.2);
+      bossEnemy.setScale(0.2);
       this.physics.add.collider(bossEnemy, player, handlePlayerCollisionBoss);
 
       let temp;
