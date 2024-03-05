@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import trophy from '../pages/assets/player.png';
+import enemy from '../pages/assets/fire_bckg_1.png';
 
 const Phase = () => {
   let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
@@ -62,7 +64,8 @@ const Phase = () => {
     let blocks = [];
 
     function preload() {
-      this.load.image('player', '../pages/images/editedLogo.png');
+      this.load.image('player', trophy);
+      this.load.image('enemy', enemy);
     }
 
     function create() {
@@ -71,6 +74,7 @@ const Phase = () => {
       player = this.physics.add.sprite(385, 385, 'player');
       player.setCollideWorldBounds(true);
       player.setDepth(1);
+      player.setScale(0.2);
 
       // Create boss enemy
       bossEnemy = this.physics.add.sprite(100, 100, 'bossEnemy'); // Spawn boss enemy in top left corner
@@ -150,6 +154,7 @@ const Phase = () => {
 
         const enemy = scene.physics.add.sprite(x, y, 'enemy');
         enemy.setCollideWorldBounds(true);
+        enemy.setScale(0.2);
         scene.physics.world.enable(enemy, Phaser.Physics.Arcade.Sprite);
         scene.physics.add.overlap(player, enemy, handlePlayerCollision);
 
