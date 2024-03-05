@@ -54,7 +54,6 @@ const Phase = () => {
       player.setCollideWorldBounds(true);
       player.setDepth(1);
       player.setScale(0.2);
-      enemy.setScale(0.2);
 
       const block = this.add.rectangle(210, 245, 140, 210, 0x0000ff);
       const block2 = this.add.rectangle(560, 525, 140, 210, 0x0000ff);

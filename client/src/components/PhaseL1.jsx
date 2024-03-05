@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef} from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import trophy from '../pages/assets/player.png';
 import enemy from '../pages/assets/enemy_5.png';
@@ -54,7 +54,6 @@ const Phase = () => {
       player.setCollideWorldBounds(true);
       player.setDepth(1);
       player.setScale(0.2)
-      enemy.setScale(0.2);
 
       generateEnemies(this, player);
 
