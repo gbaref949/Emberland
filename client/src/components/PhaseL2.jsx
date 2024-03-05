@@ -104,6 +104,16 @@ const Phase = () => {
         })
         navigate('/gameOver');
       }
+
+      if(scoreRef.current === 350){
+        let score = scoreRef.current
+        fetch(`http://localhost:5000/${currentUser.userID}`,{
+          method: 'PUT',
+          body: JSON.stringify({score}),
+          headers: {'Content-Type': 'application/json'},
+        })
+        navigate('/level3')
+      }
     }
 
     function generateEnemies(scene) {
@@ -133,10 +143,10 @@ const Phase = () => {
         counter++;
 
         // Stop generating after a certain number of enemies (adjust as needed)
-        if (counter >= 2) {
+        if (counter >= 35) {
           clearInterval(intervalId);
         }
-      }, 3000);
+      }, 2500);
 
       // Update function to be called in the scene's update loop
       function update() {
@@ -244,7 +254,7 @@ const Phase = () => {
     }
 
     function trackPlayerWithCollision(enemy, player) {
-      const speed = 50; // Adjust the speed as needed
+      const speed = 60; // Adjust the speed as needed
 
       // Create Phaser.Vector2 instances for enemy and player positions
       const enemyPosition = new Phaser.Math.Vector2(enemy.x, enemy.y);

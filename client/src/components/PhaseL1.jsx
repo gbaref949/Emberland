@@ -92,6 +92,16 @@ const Phase = () => {
         })
         navigate('/gameOver');
       }
+
+      if(scoreRef.current === 200){
+        let score = scoreRef.current
+        fetch(`http://localhost:5000/${currentUser.userID}`,{
+          method: 'PUT',
+          body: JSON.stringify({score}),
+          headers: {'Content-Type': 'application/json'},
+        })
+        navigate('/level2')
+      }
     }
 
     function generateEnemies(scene) {
@@ -121,7 +131,7 @@ const Phase = () => {
         counter++;
 
         // Stop generating after a certain number of enemies (adjust as needed)
-        if (counter >= 2) {
+        if (counter >= 20) {
           clearInterval(intervalId);
         }
       }, 3000);

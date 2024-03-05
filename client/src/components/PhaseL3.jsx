@@ -130,7 +130,7 @@ const Phase = () => {
         navigate('/gameOver');
       }
       // Track player with collision for boss enemy
-      trackPlayerWithCollision(bossEnemy, player);
+      trackPlayerWithCollisionBoss(bossEnemy, player);
     }
 
     function generateEnemies(scene) {
@@ -158,12 +158,7 @@ const Phase = () => {
 
         // Increment counter
         counter++;
-
-        // Stop generating after a certain number of enemies (adjust as needed)
-        if (counter >= 2) {
-          clearInterval(intervalId);
-        }
-      }, 3000);
+      }, 2000);
 
       // Update function to be called in the scene's update loop
       function update() {
@@ -176,7 +171,7 @@ const Phase = () => {
       scene.events.on('update', update);
     }
 
-    function trackPlayerWithCollision(enemy, player) {
+    function trackPlayerWithCollisionBoss(enemy, player) {
       const speed = 50; // Adjust the speed as needed
     
       // Create Phaser.Vector2 instances for enemy and player positions
@@ -272,8 +267,8 @@ const Phase = () => {
     }
 
     function handlePlayerCollisionBoss() {
-      const pushForce = 1000;
-      healthRef.current -= 5;
+      const pushForce = 1500;
+      healthRef.current -= 15;
       healthText.setText(`Health : ${healthRef.current}`)
     
       const directionX = player.x - bossEnemy.x;
@@ -316,7 +311,7 @@ const Phase = () => {
     }
 
     function trackPlayerWithCollision(enemy, player) {
-      const speed = 50; // Adjust the speed as needed
+      const speed = Phaser.Math.Between(65, 75);; // Adjust the speed as needed
 
       // Create Phaser.Vector2 instances for enemy and player positions
       const enemyPosition = new Phaser.Math.Vector2(enemy.x, enemy.y);
@@ -388,6 +383,8 @@ const Phase = () => {
 
         player.scene.physics.add.overlap(attackSprite, bossEnemy, ()=>{
           bossHitCounter.current++;
+          scoreRef.current += 20;
+          scoreText.setText(`Score: ${scoreRef.current}`);
           let x = Phaser.Math.Between(0, 770);
           let y = Phaser.Math.Between(0, 770);
 
@@ -396,10 +393,17 @@ const Phase = () => {
             x = Phaser.Math.Between(0, 770);
             y = Phaser.Math.Between(0, 770);
           }
-          if(bossHitCounter.current === 5){
+          if(bossHitCounter.current === 30){
             bossEnemy.disableBody(true, true);
-            scoreRef.current += 50;
+            scoreRef.current += 700;
+            let score = scoreRef.current
             scoreText.setText(`Score: ${scoreRef.current}`);
+            fetch(`http://localhost:5000/${currentUser.userID}`,{
+              method: 'PUT',
+              body: JSON.stringify({score}),
+              headers: {'Content-Type': 'application/json'},
+            });
+            navigate('/dashboard');
           }
           bossEnemy.x = x;
           bossEnemy.y = y;
