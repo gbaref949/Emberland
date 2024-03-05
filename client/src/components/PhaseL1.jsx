@@ -7,6 +7,8 @@ const Phase = () => {
   const healthRef = useRef(100);
   const scoreRef = useRef(0);
   const navigate = useNavigate();
+  let game;
+  let pauseGame, resumeGame, destroyGame;
 
   useEffect(() => {
     const Phaser = require('phaser');
@@ -29,7 +31,7 @@ const Phase = () => {
       },
     };
 
-    const game = new Phaser.Game(config);
+    game = new Phaser.Game(config);
     let cursors, keys, dashTimer, healthText, regen, intervalId, scoreText;
     let player, block1, attackSprite;
     let dashAvailable = true;
@@ -320,15 +322,52 @@ const Phase = () => {
         });
       }
     }
-  });
 
-  const [gamePaused, setGamePaused] = useState(false);
+    pauseGame = () => {
+      // Pause everything in the game
+      game.scene.scenes.forEach((scene) => {
+        if (scene.scene.pause) {
+          scene.scene.pause();
+        }
+      });
+    };
+
+    resumeGame = () => {
+      // Resume everything in the game
+      game.scene.scenes.forEach((scene) => {
+        if (scene.scene.resume) {
+          scene.scene.resume();
+        }
+      });
+
+      // Additional logic to resume other game components
+    };
+
+    destroyGame = () =>{
+      game.destroy(true);
+      clearInterval(intervalId);
+      clearInterval(regen);
+    }
+
+    return () => {
+      clearInterval(regen);
+      game.destroy(true);
+    };
+  }, []);
 
   const handleMenuToggle = () => {
     const menuOverlay = document.querySelector(".menu-overlay");
     if (menuOverlay) {
       menuOverlay.classList.toggle("open");
-      setGamePaused(!gamePaused);
+
+      // Pause or resume the game based on the menu state
+      if (menuOverlay.classList.contains("open")) {
+        // Menu is open, pause the game
+        pauseGame();
+      } else {
+        // Menu is closed, resume the game
+        resumeGame();
+      }
     }
   };
 
@@ -348,7 +387,10 @@ const Phase = () => {
   useEffect(() => {
     const menuLink = document.querySelector(".menu-link");
     if (menuLink) {
-      menuLink.addEventListener("click", handleMenuToggle);
+      menuLink.addEventListener("click", (event) => {
+        event.preventDefault();
+        handleMenuToggle();
+      });
       return () => {
         menuLink.removeEventListener("click", handleMenuToggle);
       };
@@ -360,17 +402,7 @@ const Phase = () => {
     if (menuOverlay) {
       menuOverlay.classList.remove("open");
     }
-    setGamePaused(false);
-  };
-
-  const handleQuit = () => {
-    // Handle quitting logic (redirect to dashboard)
-    navigate('/dashboard');
-  };
-
-  const handleRestart = () => {
-    // Handle restarting logic (reload page)
-    window.location.reload();
+    resumeGame();
   };
 
   return (
@@ -381,7 +413,7 @@ const Phase = () => {
       </div>
       <div className='menu'>
         <span className='menu-circle' />
-        <a href='./' className='menu-link'>
+        <a className='menu-link'>
           <span className='menu-icon'>
             <span className='menu-line menu-line-1' />
             <span className='menu-line menu-line-2' />
@@ -391,27 +423,16 @@ const Phase = () => {
       </div>
       <div className='menu-overlay'>
         <div className='overlay-info'>
-          <h1>Controls</h1>
+          {/* <h1>Controls</h1> */}
           {/* Controls info */}
-          <ul>
-            <li>
-              <button onClick={handleResume}>Resume</button>
-            </li>
-          </ul>
-          <ul>
-            <li>
-              <button onClick={handleQuit}>Quit</button>
-            </li>
-          </ul>
-          <ul>
-            <li>
-              <button onClick={handleRestart}>Restart</button>
-            </li>
-          </ul>
+
+          <Link to={'/dashboard'} className='menuBtn' onClick={()=> destroyGame()}>Quit</Link>
+          <Link to={'/level1'} className='menuBtn'>Restart</Link>
         </div>
       </div>
     </>
   );
+
 };
 
 export default Phase;
