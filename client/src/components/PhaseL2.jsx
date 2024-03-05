@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import trophy from '../pages/assets/player.png';
-import enemy from '../pages/assets/enemy_5.png';
+import enemy from '../pages/assets/enemy_1.png';
 
 const Phase = () => {
   let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
@@ -137,6 +137,7 @@ const Phase = () => {
 
         const enemy = scene.physics.add.sprite(x, y, 'enemy');
         enemy.setCollideWorldBounds(true);
+        enemy.setScale(0.2);
         scene.physics.world.enable(enemy, Phaser.Physics.Arcade.Sprite);
         scene.physics.add.overlap(player, enemy, handlePlayerCollision);
 
