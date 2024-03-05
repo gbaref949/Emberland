@@ -16,12 +16,14 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Leaderboard from './pages/Leaderboard';
 import Controls from './pages/Controls';
+import Victory from './components/Victory';
 
 const router = createBrowserRouter([
   { path: '/', element: <Register /> },
   { path: '/login', element: <Login /> },
   { path: '/dashboard', element: <Dashboard /> },
-  { path: 'leaderboard', element: <Leaderboard />},
+  { path: '/leaderboard', element: <Leaderboard />},
+  { path: '/victory', element: <Victory />},
   { path: '/controls', element: <Controls />},
   { path: '/gameOver', element: <GameOver /> },
   { path: '/game1', element: <Enemies /> },
