@@ -5,7 +5,7 @@ import enemy from '../pages/assets/enemy_1.png';
 
 const Phase = () => {
   let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-  const direction = useRef('W'); // Using useRef instead of useState
+  const direction = useRef('W');
   const healthRef = useRef(100);
   const scoreRef = useRef(0);
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ const Phase = () => {
       const block2 = this.add.rectangle(560, 525, 140, 210, 0x0000ff);
       const block3 = this.add.rectangle(7.5*70, 210, 210, 140, 0x0000ff);
       const block4 = this.add.rectangle(245, 560, 210, 140, 0x0000ff);
-      this.physics.add.existing(block, true); // Enable physics and make it immovable
+      this.physics.add.existing(block, true);
       this.physics.add.existing(block2, true);
       this.physics.add.existing(block3, true);
       this.physics.add.existing(block4, true);
@@ -121,7 +121,6 @@ const Phase = () => {
     }
 
     function generateEnemies(scene) {
-      // Generate enemies
       let counter = 0;
 
       // Generate enemies at regular intervals
@@ -144,7 +143,6 @@ const Phase = () => {
         // Add the enemy to the tracking array
         newEnemies.push(enemy);
 
-        // Increment counter
         counter++;
 
         // Stop generating after a certain number of enemies (adjust as needed)
@@ -166,7 +164,7 @@ const Phase = () => {
 
     function handleMovement() {
       const speed = 150;
-      const friction = 0.8; // Adjust the friction factor as needed
+      const friction = 0.8;
 
       if (cursors.left.isDown || keys.A.isDown) {
           player.setVelocityX(-speed);
@@ -217,9 +215,8 @@ const Phase = () => {
       // Set the new velocity
       player.setVelocity(dashX, dashY);
 
-      // Runs the code after a short time
       dashTimer = player.scene.time.addEvent({
-          delay: 100, // Adjust the delay as needed
+          delay: 100,
           callback: () => {
           dashTimer.destroy();
           // allows the player to move again
@@ -244,9 +241,7 @@ const Phase = () => {
       const directionX = player.x - enemy.x;
       const directionY = player.y - enemy.y;
 
-      // Check if the length is not zero before normalization
       const length = Math.sqrt(directionX ** 2 + directionY ** 2);
-      // Normalize the direction vector
       const normalizedDirectionX = directionX / length;
       const normalizedDirectionY = directionY / length;
 
@@ -261,7 +256,6 @@ const Phase = () => {
     function trackPlayerWithCollision(enemy, player) {
       const speed = 60; // Adjust the speed as needed
 
-      // Create Phaser.Vector2 instances for enemy and player positions
       const enemyPosition = new Phaser.Math.Vector2(enemy.x, enemy.y);
       const playerPosition = new Phaser.Math.Vector2(player.x, player.y);
 
@@ -269,12 +263,9 @@ const Phase = () => {
       function update() {
           // Calculate the direction vector from enemy to player
           const direction = playerPosition.clone().subtract(enemyPosition).normalize();
-
-          // Set the velocity based on the normalized direction
           enemy.setVelocity(direction.x * speed, direction.y * speed);
       }
 
-      // Update function is added to the scene's update method
       enemy.scene.events.on('update', update, this);
     }
 
@@ -381,10 +372,8 @@ const Phase = () => {
 
       // Pause or resume the game based on the menu state
       if (menuOverlay.classList.contains("open")) {
-        // Menu is open, pause the game
         pauseGame();
       } else {
-        // Menu is closed, resume the game
         resumeGame();
       }
     }
